@@ -16,3 +16,6 @@ def customer(request):
 
 def customerList(request):
     return render(request, 'app/customer-list.html', {})  
+
+def openContruction(request):
+    return render(request, 'app/open-construction.html', {})  

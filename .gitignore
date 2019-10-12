@@ -1,0 +1,9 @@
+# Itens ignorados
+*.pyc
+*.egg-info
+.idea
+scripts/
+*.pytest_cache/
+*.vscode/
+*.sqlite3
+venv/

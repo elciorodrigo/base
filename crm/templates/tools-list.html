@@ -1,0 +1,64 @@
+{% extends 'app/base.html' %}
+{% block content %}
+{% load static %}
+<!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800">Clientes</h1>
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Lista de Empresas</h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Ferramenta</th>
+                      <th>Patrimonio</th>
+                      <th>Custo</th>
+                      <th>Quantidade</th>
+                      <th>Voltagem</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>Ferramenta</th>
+                      <th>Patrimonio</th>
+                      <th>Custo</th>
+                      <th>Quantidade</th>
+                      <th>Voltagem</th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                  {% for tool in tools %}
+                    <tr>
+                      <td>{{ tool.name }}</td>
+                      <td>{{ tool.external_id }}</td>
+                      <td>{{ tool.price }}</td>
+                      <td>{{ tool.amount }}</td>
+                      <td>{{ tool.voltage }}</td>
+                   </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+
+    
+    
+
+{% endblock %}
+  <!-- Page level plugins -->
+
+ 
+  

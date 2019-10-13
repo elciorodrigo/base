@@ -18,78 +18,76 @@
                 <input type="number" class="form-control" name="employee_id" value="{{ employee.id }}" hidden>
               <div class="form-group row">
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <input type="text" class="form-control form-control-user text-center" id="first_name" name="first_name"
+                    <input type="text" class="form-control  text-center" id="first_name" name="first_name"
                       placeholder="Nome" value="{{ employee.user.first_name }}">
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <input type="text" class="form-control form-control-user text-center" id="last_name" name="last_name"
+                    <input type="text" class="form-control  text-center" id="last_name" name="last_name"
                       placeholder="Sobrenome" value="{{ employee.user.last_name }}">
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <input type="date" class="form-control form-control-user text-center" id="start_date" name="start_date"
+                    <input type="date" class="form-control  text-center" id="start_date" name="start_date"
                       placeholder="Data de Admissão" value="{{ employee.get_eng_start_date }}" >
                 </div>
               </div>
               <div class="form-group row">
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="rg" name="rg"
+                  <input type="text" class="form-control  text-center rg" id="rg" name="rg"
                     placeholder="RG" value="{{ employee.rg }}">
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="cpf" name="cpf"
+                  <input type="text" class="form-control  text-center cpf" id="cpf" name="cpf"
                     placeholder="CPF" value="{{ employee.cpf }}">
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0"  data-provide="datepicker">
-                  <input type="date" class="form-control form-control-user text-center dates" id="birth_date" name="birth_date"
+                  <input type="date" class="form-control  text-center dates" id="birth_date" name="birth_date"
                     placeholder="Data Nascimento" value="{{ employee.get_format_birth_date }}" required>
                 </div>
               </div>
               <div class="form-group row">
                   <div class="col-sm-4 mb-3 mb-sm-0">
-                      <input type="text" class="form-control form-control-user text-center" id="phone" name="phone"
+                      <input type="text" class="form-control  text-center phone_with_ddd" id="phone" name="phone"
                         placeholder="Telefone Principal" value="{{ employee.phone }}">
                     </div>
                     <div class="col-sm-4 mb-3 mb-sm-0">
-                      <input type="text" class="form-control form-control-user text-center" id="cellphone" name="cellphone"
+                      <input type="text" class="form-control  text-center phone_with_ddd" id="cellphone" name="cellphone"
                         placeholder="Telefone Secundário" value="{{ employee.cellphone }}">
                     </div>
                     <div class="col-sm-4 mb-3 mb-sm-0">
-                      <input type="email" class="form-control form-control-user text-center" id="email" name="email"
+                      <input type="email" class="form-control  text-center" id="email" name="email"
                         placeholder="E-mail" value="{{ employee.user.email }}">
                     </div>
               </div>
               <hr>
               <div class="form-group row">
                <div class="col-sm-10 mb-3 mb-sm-0">
-                    <input type="address" class="form-control form-control-user text-center" id="address" name="address"
+                    <input type="address" class="form-control  text-center" id="address" name="address"
                       placeholder="Endereço" value="{{ employee.address }}">
                 </div>
                <div class="col-sm-2 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="address_number" name="address_number"
+                  <input type="text" class="form-control  text-center" id="address_number" name="address_number"
                     placeholder="Nº" value="{{ employee.address_number }}">
                 </div>
               </div>
               <div class="form-group row">
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="adjunct" name="adjunct"
+                  <input type="text" class="form-control  text-center" id="adjunct" name="adjunct"
                     placeholder="Complemento" value="{{ employee.adjunct }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="cep" name="cep"
+                  <input type="text" class="form-control  text-center cep" id="cep" name="cep"
                     placeholder="Cep" value="{{ employee.cep }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="neighborhood" name="neighborhood"
+                  <input type="text" class="form-control  text-center" id="neighborhood" name="neighborhood"
                     placeholder="Bairro" value="{{ employee.neighborhood }}">
                 </div>
                 <div class="col-sm-3">
-                  <input type="text" class="form-control form-control-user text-center" id="city" name="city"
+                  <input type="text" class="form-control  text-center" id="city" name="city"
                     placeholder="Cidade" value="{{ employee.city }}">
                 </div>
               </div>
-
               <hr>
-
               <div class="form-group row">
                 <div class="col-sm-4 mb-3 mb-sm-0">
                       <select class="form-control text-center" id="position" name="position">
@@ -100,11 +98,11 @@
 
                 </div>
                <div class="col-sm-4 mb-3 mb-sm-0">
-                    <input type="number" class="form-control form-control-user text-center" id="salary"  name="salary"
+                    <input type="text" class="form-control  text-center money" id="salary"  name="salary"
                       placeholder="Salário" value="{{ employee.salary }}">
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                  <input type="txt" class="form-control form-control-user text-center" id="external_id" name="external_id"
+                  <input type="txt" class="form-control  text-center" id="external_id" name="external_id"
                     placeholder="Matrícula" value="{{ employee.external_id }}" required>
                 </div>
 

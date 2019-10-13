@@ -8,8 +8,8 @@ def set_employee(employee_dict):
     first_name = employee_dict.get('first_name')
     employee_id = employee_dict.get('employee_id')
     last_name = employee_dict.get('last_name')
-    rg = employee_dict.get('rg')
-    cpf = employee_dict.get('cpf')
+    rg = employee_dict.get('rg').replace('.','').replace('-','')
+    cpf = employee_dict.get('cpf').replace('.','').replace('-','')
     birth_date  = datetime.strptime(employee_dict.get('birth_date'), '%Y-%m-%d') if employee_dict.get('birth_date') else None
     start_date  = datetime.strptime(employee_dict.get('start_date'), '%Y-%m-%d') if employee_dict.get('start_date') else None
     phone = employee_dict.get('phone')
@@ -22,7 +22,7 @@ def set_employee(employee_dict):
     neighborhood = employee_dict.get('neighborhood')
     city = employee_dict.get('city')
     position_id = employee_dict.get('position')
-    salary = float(employee_dict.get('salary')) if employee_dict.get('salary') else None
+    salary = float(employee_dict.get('salary').replace('.','').replace(',','')) if employee_dict.get('salary') else None
     external_id = employee_dict.get('external_id')
     #position_id = 1
     position = Position.objects.get(id=position_id)
@@ -72,7 +72,8 @@ def set_employee(employee_dict):
         city=city,
         position=position,
         salary= salary,
-        start_date=start_date
+        start_date=start_date,
+        external_id=external_id,
     )
     return employee
 

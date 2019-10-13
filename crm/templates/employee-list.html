@@ -2,20 +2,30 @@
 {% block content %}
 {% load static %}
 <!-- Begin Page Content -->
-        <div class="container-fluid">
+<div class="container-fluid">
 
-          <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Colaboradores</h1>
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Colaboradores</h1>
 
-          <!-- DataTales Example -->
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Lista de Colaboradores</h6>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Lista de Colaboradores</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Matrícula</th>
+              <th>Nome</th>
+              <th>CPF</th>
+              <th>RG</th>
+              <th>Data de Admissão</th>
+              <th>Cargo</th>
+            </tr>
+          </thead>
+          <!-- <tfoot>
                     <tr>
                       <th>Matrícula</th>
                       <th>Nome</th>
@@ -24,58 +34,45 @@
                       <th>Data de Admissão</th>
                       <th>Cargo</th>
                     </tr>
-                  </thead>
-                  <tfoot>
-                    <tr>
-                      <th>Matrícula</th>
-                      <th>Nome</th>
-                      <th>CPF</th>
-                      <th>RG</th>
-                      <th>Data de Admissão</th>
-                      <th>Cargo</th>
-                    </tr>
-                  </tfoot>
-                  <tbody>
-                  {% for emp in employee %}
-                    <tr>
-                      <td>{{ emp.external_id }}</td>
-                      <td>{{ emp.user.get_full_name }}</td>
-                      <td>{{ emp.cpf }}</td>
-                      <td>{{ emp.rg }}</td>
-                      <td>{{ emp.get_format_start_date }}</td>
-                      <td>{{ emp.position }}</td>
-                    </tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /.container-fluid -->
+                  </tfoot> -->
+          <tbody>
+            {% for emp in employee %}
+            <tr>
+              <td><a href='../employee/{{ emp.id }}'>{{ emp.external_id }}</td>
+              <td >{{ emp.user.get_full_name }}</td>
+              <td class="cpf">{{ emp.cpf }}</td>
+              <td class="rg">{{ emp.rg }}</td>
+              <td>{{ emp.get_format_start_date }}</td>
+              <td>{{ emp.position }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.container-fluid -->
 
-        <script>
-        var datatable = $('#tableEmployee').DataTable({
-            "language": {
-                "lengthMenu": "Mostrando _MENU_ registros por página",
-                "zeroRecords": "Não foram encontrados registros",
-                "info": "Exibindo _START_ até _END_ de um total de _TOTAL_ tickets",
-                "infoEmpty": "Não foram encontrados registros",
-                "infoFiltered": "(filtrados de um total de _MAX_ chamados)",
-                "paginate": {
-                    "first": "Primeiro",
-                    "last": "Último",
-                    "next": "Próximo",
-                    "previous": "Anterior"
-                },
-                "search": "Buscar:"
-            }
-        })
+<script>
+  var datatable = $('#dataTable').DataTable({
+    "language": {
+      "lengthMenu": "Mostrando _MENU_ registros por página",
+      "zeroRecords": "Não foram encontrados registros",
+      "info": "Exibindo _START_ até _END_ de um total de _TOTAL_ tickets",
+      "infoEmpty": "Não foram encontrados registros",
+      "infoFiltered": "(filtrados de um total de _MAX_ chamados)",
+      "paginate": {
+        "first": "Primeiro",
+        "last": "Último",
+        "next": "Próximo",
+        "previous": "Anterior"
+      },
+      "search": "Buscar:"
+    }
+  })
 
-        </script>
+</script>
 
 {% endblock %}
-  <!-- Page level plugins -->
-
- 
-  
+<!-- Page level plugins -->

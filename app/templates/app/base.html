@@ -21,6 +21,8 @@
 
   <!-- Custom styles for this template-->
   <link href="{% static 'app/css/sb-admin-2.min.css' %}" rel="stylesheet">
+  
+
 
 </head>
 
@@ -469,17 +471,18 @@
           </ul>
 
         </nav>
-      
+       
+       
         <!-- End of Topbar -->
         {% block content %}
 
         {% endblock %}
-
+     
         <!-- /.container-fluid -->
-
-
+   
+      </div>
         <!-- End of Main Content -->
-
+        
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
           <div class="container my-auto">
@@ -495,7 +498,7 @@
 
     </div>
     <!-- End of Page Wrapper -->
-
+  </div>
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fas fa-angle-up"></i>
@@ -542,6 +545,16 @@
     <script src="{% static 'app/vendor/datatables/jquery.dataTables.min.js'%}"></script>
     <script src="{% static 'app/vendor/datatables/dataTables.bootstrap4.min.js'%}"></script>
     <script src="{% static 'app/js/demo/datatables-demo.js'%}"></script>
+
+    <script src="{% static 'app/mask/jQuery-Mask/distribuicao/jquery.mask.min.js' %}"></script>
 </body>
+<script>
+      $('.money').mask('#.##0,00', { reverse: true });
+      $('.cpf').mask('000.000.000-00', {reverse: true});
+      $('.rg').mask('00.000.000-0', {reverse: true});
+      $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
+      $('.phone_with_ddd').mask('(00) 0000-0000');
+      $('.cep').mask('00000-000');
+</script>
 
 </html>

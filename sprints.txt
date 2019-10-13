@@ -1,0 +1,25 @@
+SPRINT 1 
+	Arquitetura 
+	-Cadastros gerais
+		-Colaboradores (logins/senhas/Permissões de acesso/documentos)  6h
+		-Ferramentas 6h
+		-Clientes 6h
+		-Veiculos (ver depois)
+		-Arquivos(funcionários - PPRA PCMSO CNDs / fotos/pdfs) - Redimensionamento	de imagens 15h
+		
+		
+SPRINT 2 
+	-vínculos dependentes
+		-Apontamento de horas (Colaborador)
+		-Abertura de Obra(Cliente - Colaborador - Arquivos - ferramentas / ?Veículo)
+		-Envio de arquivos(Andamento - final)
+		-Centro de custo(Coloborador - Obra - Arquivo)
+		-Registro Veículos(Colaborador)
+
+SPRINT 3 
+	-Relatórios
+		-PPRA PCMSO CNDs 
+		-Apresentação da empresa 
+		-Relatório de Andamento 
+		-Relatório final
+		-Relatório dos funcionários

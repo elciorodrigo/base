@@ -90,5 +90,26 @@ class Tools(models.Model):
     def __str__(self):
         return self.name
 
+    def get_price(self):
+        price_br = "%4.2f" % self.price
+        return  price_br.replace('.', ',')
+
     class Meta:
         db_table = 'tools'
+
+
+class Media(models.Model):
+    file_name = models.CharField(max_length=100)
+    file = models.BinaryField()
+
+    def __str__(self):
+        return self.file_name
+
+    def get_media(self):
+        #encoded = self.file.encode('ascii')
+        #import base64
+        #encoded = base64.b64encode(self.file)
+        return self.file
+
+    class Meta:
+        db_table = 'media'

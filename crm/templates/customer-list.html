@@ -24,20 +24,10 @@
                       <th>Telefone Secundário</th>
                     </tr>
                   </thead>
-                  <tfoot>
-                    <tr>
-                      <th>ID</th>
-                      <th>Razão Social</th>
-                      <th>CNPJ</th>
-                      <th>I.E</th>
-                      <th>Telefone Principal</th>
-                      <th>Telefone Secundário</th>
-                    </tr>
-                  </tfoot>
                   <tbody>
                   {% for cust in customer %}
                     <tr>
-                      <td>{{ cust.id }}</td>
+                      <td><a href='../customer/{{ cust.id }}'>{{ cust.id }}</a></td>
                       <td>{{ cust.corporate_name }}</td>
                       <td>{{ cust.cnpj }}</td>
                       <td>{{ cust.state_registration }}</td>

@@ -1,8 +1,10 @@
 __author__ = 'rafeg'
 
-from .models import Employee, Position, Customer, Tools
+from .models import Employee, Position, Customer, Tools, Media
+from .util import remage
 from django.contrib.auth.models import User
 from datetime import datetime
+
 
 def set_employee(employee_dict):
     first_name = employee_dict.get('first_name')
@@ -24,7 +26,7 @@ def set_employee(employee_dict):
     position_id = employee_dict.get('position')
     salary = float(employee_dict.get('salary').replace('.','').replace(',','')) if employee_dict.get('salary') else None
     external_id = employee_dict.get('external_id')
-    #position_id = 1
+
     position = Position.objects.get(id=position_id)
 
     if employee_id:
@@ -55,26 +57,29 @@ def set_employee(employee_dict):
             user.save()
             return employee
     username = '{}-{}'.format(external_id, first_name)
-    user = User.objects.create(username=username, first_name=first_name, last_name=last_name, email=email)
-
-    employee = Employee.objects.create(
-        user=user,
-        rg=rg,
-        cpf= cpf,
-        birth_date=birth_date ,
-        phone=phone,
-        cellphone=cellphone,
-        address=address,
-        address_number=address_number,
-        adjunct=adjunct,
-        cep=cep,
-        neighborhood=neighborhood,
-        city=city,
-        position=position,
-        salary= salary,
-        start_date=start_date,
-        external_id=external_id,
-    )
+    user, _ = User.objects.get_or_create(username=username, first_name=first_name, last_name=last_name, email=email)
+    try:
+        employee = Employee.objects.create(
+            user=user,
+            rg=rg,
+            cpf= cpf,
+            birth_date=birth_date ,
+            phone=phone,
+            cellphone=cellphone,
+            address=address,
+            address_number=address_number,
+            adjunct=adjunct,
+            cep=cep,
+            neighborhood=neighborhood,
+            city=city,
+            position=position,
+            salary= salary,
+            start_date=start_date,
+            external_id=external_id,
+        )
+    except Exception as ex:
+        user.delete()
+        raise ex
     return employee
 
 
@@ -133,7 +138,7 @@ def set_tools(tools_dict):
     tools_id = tools_dict.get('tools_id')
     name = tools_dict.get('name')
     voltage = tools_dict.get('voltage') if tools_dict.get('voltage') else None
-    price = tools_dict.get('price') if tools_dict.get('price') else None
+    price =  float(tools_dict.get('price').replace('.','').replace(',','.')) if tools_dict.get('price') else None
     external_id = tools_dict.get('external_id') if tools_dict.get('external_id') else None
     amount = tools_dict.get('amount') if tools_dict.get('amount') else None
 
@@ -142,7 +147,7 @@ def set_tools(tools_dict):
         if tools:
             tools.update(
                 name=name,
-                voltage=None,
+                voltage=voltage,
                 price=price,
                 external_id=external_id,
                 amount=amount
@@ -150,8 +155,7 @@ def set_tools(tools_dict):
             tools = tools.get()
             return tools
 
-    print('chegou aqui')
-    print(voltage)
+
     tools = Tools.objects.create(
             name=name,
             voltage=voltage,
@@ -159,5 +163,12 @@ def set_tools(tools_dict):
             external_id=external_id,
             amount=amount
     )
-    print('chegou aqui 2')
     return tools
+
+
+def set_media(file, file_name):
+    image = remage(file, 300)
+    media = Media.objects.create(file_name=file_name, file=image)
+    return media
+
+

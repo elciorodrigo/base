@@ -1,0 +1,47 @@
+{% extends 'app/base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="container-fluid">
+
+  <div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card-body p-0">
+      <!-- Nested Row within Card Body -->
+      <div class="row">
+
+        <div class="col-lg-12">
+          <div class="p-5">
+            <div class="text-center">
+              <h1 class="h4 text-gray-900 mb-4">{% if media %}Alterar Imagem {% else %}Anexar Imagem {% endif %}</h1>
+            </div>
+            <form enctype="multipart/form-data" class="user" action="submit" method="POST">{% csrf_token %}
+                <input type="number" class="form-control" name="media_id" value="{{ media.id }}" hidden>
+
+                <div class="form-group row">
+                    <div class="col-sm-12 mb-12 mb-sm-0">
+                        <input type="file" class="form-control-file border" name="media_file">
+                    </div>
+                    <div class="col-sm-12 mb-12 mb-sm-0">
+                        <img src="data:image/png;base64,{{ media.get_media }}">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-user btn-block">
+                    Anexar
+                </button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+{% endblock %}

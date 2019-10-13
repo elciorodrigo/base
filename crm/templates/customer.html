@@ -17,53 +17,53 @@
             <form enctype="multipart/form-data" class="user" action="submit" method="POST">{% csrf_token %}
                 <input type="number" class="form-control" name="customer_id" value="{{ customer.id }}" hidden>
               <div class="form-group ">
-                <input type="text" class="form-control form-control-user text-center" id="corporate_name" name="corporate_name"
+                <input type="text" class="form-control text-center" id="corporate_name" name="corporate_name" data-toggle="tooltip" title="Razão Social"
                   placeholder="Razão social" value="{{ customer.corporate_name }}">
               </div>
               <div class="form-group row">
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="state_registration" name="state_registration"
+                  <input type="text" class="form-control text-center" id="state_registration" name="state_registration" data-toggle="tooltip" title="I.E"
                     placeholder="I.E" value="{{ customer.state_registration }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="cnpj" name="cnpj"
+                  <input type="text" class="form-control text-center cnpj" id="cnpj" name="cnpj" data-toggle="tooltip" title="CNPJ"
                     placeholder="CNPJ" value="{{ customer.cnpj }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="phone" name="phone"
+                  <input type="text" class="form-control text-center phone_with_ddd" id="phone" name="phone" data-toggle="tooltip" title="Telefone Principal"
                     placeholder="Telefone Principal" value="{{ customer.phone }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="cellphone" name="cellphone"
+                  <input type="text" class="form-control text-center phone_with_ddd" id="cellphone" name="cellphone" data-toggle="tooltip" title="Telefone Secundário"
                     placeholder="Telefone Secundário" value="{{ customer.cellphone }}">
                 </div>
               </div>
               <hr>
               <div class="form-group row">
                <div class="col-sm-10 mb-3 mb-sm-0">
-                    <input type="address" class="form-control form-control-user text-center" id="address" name="address"
+                    <input type="address" class="form-control text-center" id="address" name="address" data-toggle="tooltip" title="Endereço"
                       placeholder="Endereço" value="{{ customer.address }}">
                 </div>
                <div class="col-sm-2 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="address_number" name="address_number"
-                    placeholder="Nº" value="{{ customer.address_number }}">
+                  <input type="number" class="form-control text-center" id="address_number" name="address_number" data-toggle="tooltip" title="Número"
+                    placeholder="Nº" value="{{ customer.address_number }}" max="99999">
                 </div>
               </div>
               <div class="form-group row">
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="adjunct" name="adjunct"
+                  <input type="text" class="form-control text-center" id="adjunct" name="adjunct" data-toggle="tooltip" title="Complemento"
                     placeholder="Complemento" value="{{ customer.adjunct }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="cep" name="cep"
+                  <input type="text" class="form-control text-center cep" id="cep" name="cep" data-toggle="tooltip" title="CEP"
                     placeholder="Cep" value="{{ customer.cep }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="neighborhood" name="neighborhood"
+                  <input type="text" class="form-control text-center" id="neighborhood" name="neighborhood" data-toggle="tooltip" title="Bairro"
                     placeholder="Bairro" value="{{ customer.neighborhood }}">
                 </div>
                 <div class="col-sm-3">
-                  <input type="text" class="form-control form-control-user text-center" id="city" name="city"
+                  <input type="text" class="form-control text-center" id="city" name="city" data-toggle="tooltip" title="Cidade"
                     placeholder="Cidade" value="{{ customer.city }}">
                 </div>
               </div>
@@ -81,5 +81,12 @@
   </div>
 
 </div>
+
+<script>
+
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 
 {% endblock %}

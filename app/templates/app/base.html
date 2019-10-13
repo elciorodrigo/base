@@ -21,7 +21,8 @@
 
   <!-- Custom styles for this template-->
   <link href="{% static 'app/css/sb-admin-2.min.css' %}" rel="stylesheet">
-  
+
+    <script src="{% static 'app/vendor/jquery/jquery.min.js' %}"></script>
 
 
 </head>
@@ -105,6 +106,22 @@
             <h6 class="collapse-header">Gestão de Ferramentas</h6>
             <a class="collapse-item" href="/tools">Cadastrar</a>
             <a class="collapse-item" href="/tools-list">Listar</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#media" aria-expanded="true"
+          aria-controls="collapseTwo">
+
+          <i class="fas fa-shopping-basket"></i>
+          <span>Imagens</span>
+        </a>
+        <div id="media" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Gestão de Imagens</h6>
+            <a class="collapse-item" href="/media">Anexar</a>
+            <a class="collapse-item" href="/media-list">Listar</a>
           </div>
         </div>
       </li>

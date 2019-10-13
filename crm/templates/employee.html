@@ -18,79 +18,79 @@
                 <input type="number" class="form-control" name="employee_id" value="{{ employee.id }}" hidden>
               <div class="form-group row">
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <input type="text" class="form-control  text-center" id="first_name" name="first_name"
+                    <input type="text" class="form-control  text-center" id="first_name" name="first_name"  data-toggle="tooltip" title="Nome"
                       placeholder="Nome" value="{{ employee.user.first_name }}">
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <input type="text" class="form-control  text-center" id="last_name" name="last_name"
+                    <input type="text" class="form-control  text-center" id="last_name" name="last_name"  data-toggle="tooltip" title="Sobrenome"
                       placeholder="Sobrenome" value="{{ employee.user.last_name }}">
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <input type="date" class="form-control  text-center" id="start_date" name="start_date"
+                    <input type="date" class="form-control  text-center" id="start_date" name="start_date" data-toggle="tooltip" title="Data de Admissão"
                       placeholder="Data de Admissão" value="{{ employee.get_eng_start_date }}" >
                 </div>
               </div>
               <div class="form-group row">
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                  <input type="text" class="form-control  text-center rg" id="rg" name="rg"
+                  <input type="text" class="form-control  text-center rg" id="rg" name="rg"  data-toggle="tooltip" title="RG"
                     placeholder="RG" value="{{ employee.rg }}">
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                  <input type="text" class="form-control  text-center cpf" id="cpf" name="cpf"
+                  <input type="text" class="form-control  text-center cpf" id="cpf" name="cpf"  data-toggle="tooltip" title="CPF"
                     placeholder="CPF" value="{{ employee.cpf }}">
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0"  data-provide="datepicker">
-                  <input type="date" class="form-control  text-center dates" id="birth_date" name="birth_date"
+                  <input type="date" class="form-control  text-center dates" id="birth_date" name="birth_date"  data-toggle="tooltip" title="Data de Nascimento"
                     placeholder="Data Nascimento" value="{{ employee.get_format_birth_date }}" required>
                 </div>
               </div>
               <div class="form-group row">
                   <div class="col-sm-4 mb-3 mb-sm-0">
-                      <input type="text" class="form-control  text-center phone_with_ddd" id="phone" name="phone"
+                      <input type="text" class="form-control  text-center phone_with_ddd" id="phone" name="phone"  data-toggle="tooltip" title="Telefone Principal"
                         placeholder="Telefone Principal" value="{{ employee.phone }}">
                     </div>
                     <div class="col-sm-4 mb-3 mb-sm-0">
-                      <input type="text" class="form-control  text-center phone_with_ddd" id="cellphone" name="cellphone"
+                      <input type="text" class="form-control  text-center phone_with_ddd" id="cellphone" name="cellphone"  data-toggle="tooltip" title="Telefone Secundário"
                         placeholder="Telefone Secundário" value="{{ employee.cellphone }}">
                     </div>
                     <div class="col-sm-4 mb-3 mb-sm-0">
-                      <input type="email" class="form-control  text-center" id="email" name="email"
+                      <input type="email" class="form-control  text-center" id="email" name="email"  data-toggle="tooltip" title="E-mail"
                         placeholder="E-mail" value="{{ employee.user.email }}">
                     </div>
               </div>
               <hr>
               <div class="form-group row">
                <div class="col-sm-10 mb-3 mb-sm-0">
-                    <input type="address" class="form-control  text-center" id="address" name="address"
+                    <input type="address" class="form-control  text-center" id="address" name="address"  data-toggle="tooltip" title="Endereço"
                       placeholder="Endereço" value="{{ employee.address }}">
                 </div>
                <div class="col-sm-2 mb-3 mb-sm-0">
-                  <input type="text" class="form-control  text-center" id="address_number" name="address_number"
-                    placeholder="Nº" value="{{ employee.address_number }}">
+                  <input type="number" class="form-control  text-center" id="address_number" name="address_number"  data-toggle="tooltip" title="Número"
+                    placeholder="Nº" value="{{ employee.address_number }}" max="99999">
                 </div>
               </div>
               <div class="form-group row">
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control  text-center" id="adjunct" name="adjunct"
+                  <input type="text" class="form-control  text-center" id="adjunct" name="adjunct"  data-toggle="tooltip" title="Complemento"
                     placeholder="Complemento" value="{{ employee.adjunct }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control  text-center cep" id="cep" name="cep"
+                  <input type="text" class="form-control  text-center cep" id="cep" name="cep"  data-toggle="tooltip" title="CEP"
                     placeholder="Cep" value="{{ employee.cep }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control  text-center" id="neighborhood" name="neighborhood"
+                  <input type="text" class="form-control  text-center" id="neighborhood" name="neighborhood"  data-toggle="tooltip" title="Bairro"
                     placeholder="Bairro" value="{{ employee.neighborhood }}">
                 </div>
                 <div class="col-sm-3">
-                  <input type="text" class="form-control  text-center" id="city" name="city"
+                  <input type="text" class="form-control  text-center" id="city" name="city"  data-toggle="tooltip" title="Cidade"
                     placeholder="Cidade" value="{{ employee.city }}">
                 </div>
               </div>
               <hr>
               <div class="form-group row">
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                      <select class="form-control text-center" id="position" name="position">
+                      <select class="form-control text-center" id="position" name="position"  data-toggle="tooltip" title="Cargo">
                         {% for p in position %}
                             <option value={{ p.id }} {% if p == employee.position %} selected {% endif %}>{{ p.name }}</option>
                         {% endfor %}
@@ -98,11 +98,11 @@
 
                 </div>
                <div class="col-sm-4 mb-3 mb-sm-0">
-                    <input type="text" class="form-control  text-center money" id="salary"  name="salary"
-                      placeholder="Salário" value="{{ employee.salary }}">
+                    <input type="text" class="form-control  text-center money" id="salary"  name="salary"  data-toggle="tooltip" title="Salário"
+                      placeholder="Salário" value="{{ employee.salary | floatformat:2 }}">
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                  <input type="txt" class="form-control  text-center" id="external_id" name="external_id"
+                  <input type="txt" class="form-control  text-center" id="external_id" name="external_id"  data-toggle="tooltip" title="Matrícula"
                     placeholder="Matrícula" value="{{ employee.external_id }}" required>
                 </div>
 
@@ -121,5 +121,11 @@
   </div>
 
 </div>
+<script>
+
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 
 {% endblock %}

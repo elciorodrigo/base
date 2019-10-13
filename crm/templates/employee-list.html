@@ -38,7 +38,7 @@
           <tbody>
             {% for emp in employee %}
             <tr>
-              <td><a href='../employee/{{ emp.id }}'>{{ emp.external_id }}</td>
+              <td><a href='../employee/{{ emp.id }}'>{{ emp.external_id }}</a></td>
               <td >{{ emp.user.get_full_name }}</td>
               <td class="cpf">{{ emp.cpf }}</td>
               <td class="rg">{{ emp.rg }}</td>

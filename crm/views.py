@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from .controller import set_employee, set_customer, set_tools
-from .models import Employee, Position, Customer, Tools
+from .controller import set_employee, set_customer, set_tools, set_media
+from .models import Employee, Position, Customer, Tools, Media
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -74,3 +74,24 @@ def tools(request, tools_id=False):
 def tools_list(request):
     tools = Tools.objects.all()
     return render(request, 'tools-list.html', {'tools':tools})
+
+
+def media(request, media_id=False):
+    response = {}
+    if request.POST:
+        file = request.FILES.get('media_file')
+        file_name = file.name.split('.')[0]
+        file_name = '{}.png'.format(file_name)
+        media = set_media(file, file_name)
+        response = {'media':media}
+        redirect_url = '{}'.format(media.id)
+        return HttpResponseRedirect(redirect_url)
+    else:
+        if media_id:
+            try:
+                media = Media.objects.get(id=media_id)
+                response = {'media':media}
+            except ObjectDoesNotExist:
+                return render(request, 'app/404.html', {})
+
+    return render(request, 'media.html', response)

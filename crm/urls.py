@@ -14,4 +14,8 @@ urlpatterns = [
     path('tools/<slug:tools_id>', views.tools, name='get_tools'),
     path('tools/', views.tools, name='tools'),
     path('tools-list', views.tools_list, name='tools_list'),
+
+    path('media/<slug:media_id>', views.media, name='get_tools'),
+    path('media/', views.media, name='media'),
+    #path('tools-list', views.tools_list, name='tools_list'),
 ]

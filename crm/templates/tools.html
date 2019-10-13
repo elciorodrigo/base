@@ -17,24 +17,24 @@
             <form enctype="multipart/form-data" class="user" action="submit" method="POST">{% csrf_token %}
                 <input type="number" class="form-control" name="tools_id" value="{{ tools.id }}" hidden>
               <div class="form-group ">
-                <input type="text" class="form-control form-control-user text-center" id="name" name="name"
+                <input type="text" class="form-control text-center" id="name" name="name" data-toggle="tooltip" title="Ferranenta"
                   placeholder="Ferramenta" value="{{ tools.name }}">
               </div>
               <div class="form-group row">
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user text-center" id="external_id" name="external_id"
+                  <input type="text" class="form-control text-center" id="external_id" name="external_id" data-toggle="tooltip" title="Patrimônio"
                     placeholder="Patrimônio" value="{{ tools.external_id }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="float" class="form-control form-control-user text-center" id="price" name="price"
-                    placeholder="Custo" value="{{ tools.price }}">
+                  <input type="text" class="form-control text-center money" id="price" name="price" data-toggle="tooltip" title="Custo"
+                    placeholder="Custo" value="{{ tools.price | floatformat:2 }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="number" class="form-control form-control-user text-center" id="amount" name="amount"
+                  <input type="number" class="form-control text-center" id="amount" name="amount" data-toggle="tooltip" title="Quantidade"
                     placeholder="Quantidade" value="{{ tools.amount }}">
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="number" class="form-control form-control-user text-center" id="voltage" name="voltage"
+                  <input type="number" class="form-control text-center" id="voltage" name="voltage" data-toggle="tooltip" title="Voltagem"
                     placeholder="Voltagem" value="{{ tools.voltage }}">
                 </div>
               </div>
@@ -53,4 +53,10 @@
 
 </div>
 
+<script>
+
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 {% endblock %}

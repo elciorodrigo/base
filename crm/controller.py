@@ -1,6 +1,6 @@
 __author__ = 'rafeg'
 
-from .models import Employee, Position, Customer, Tools, Media
+from .models import Employee, Position, Customer, Tools, Media, Work
 from .util import remage
 from django.contrib.auth.models import User
 from datetime import datetime
@@ -166,8 +166,60 @@ def set_tools(tools_dict):
     return tools
 
 
+def set_work(work_dict):
+    description = work_dict.get('description')
+    work_id = work_dict.get('work_id')
+    customer_id = work_dict.get('customer')
+    end_date  = datetime.strptime(work_dict.get('end_date'), '%Y-%m-%d') if work_dict.get('end_date') else None
+    start_date  = datetime.strptime(work_dict.get('start_date'), '%Y-%m-%d') if work_dict.get('start_date') else None
+    budget = float(work_dict.get('budget').replace('.','').replace(',','')) if work_dict.get('budget') else None
+    nfe_value = float(work_dict.get('nfe_value').replace('.','').replace(',','')) if work_dict.get('nfe_value') else None
+    address = work_dict.get('address')
+    address_number = work_dict.get('address_number')
+    adjunct = work_dict.get('adjunct')
+    cep = work_dict.get('cep')
+    neighborhood = work_dict.get('neighborhood')
+    city = work_dict.get('city')
+
+    customer = Customer.objects.get(id=customer_id)
+    if work_id:
+        work = Work.objects.filter(id=work_id)
+        if work:
+            work.update(
+                description=description,
+                customer=customer,
+                start_date=start_date,
+                end_date=end_date,
+                budget=budget,
+                nfe_value=nfe_value,
+                address=address,
+                address_number=address_number,
+                adjunct=adjunct,
+                cep=cep,
+                neighborhood=neighborhood,
+                city=city
+            )
+            return work.get()
+
+    work = Work.objects.create(
+        description=description,
+        customer=customer,
+        start_date=start_date,
+        end_date=end_date,
+        budget=budget,
+        nfe_value=nfe_value,
+        address=address,
+        address_number=address_number,
+        adjunct=adjunct,
+        cep=cep,
+        neighborhood=neighborhood,
+        city=city
+    )
+    return work
+
+
 def set_media(file, file_name):
-    image = remage(file, 300)
+    image = remage(file, 600)
     media = Media.objects.create(file_name=file_name, file=image)
     return media
 

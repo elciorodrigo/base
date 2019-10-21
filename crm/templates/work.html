@@ -1,0 +1,231 @@
+{% extends 'app/base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="container-fluid">
+
+  <div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card-body p-0">
+      <!-- Nested Row within Card Body -->
+      <div class="row">
+
+        <div class="col-lg-12">
+          <div class="p-5">
+            <div class="text-center">
+              <h1 class="h4 text-gray-900 mb-4">{% if work %}Obra Nº {{ work.id}}{% else %}Abrir Obra {% endif %}</h1>
+            </div>
+            <form enctype="multipart/form-data" class="user" action="submit" method="POST">{% csrf_token %}
+                <input type="number" class="form-control" name="work_id" value="{{ work.id }}" hidden>
+              <div class="form-group ">
+                <input type="text" class="form-control text-center" id="description" name="description" data-toggle="tooltip" title="Descrição"
+                  placeholder="Descrição" value="{{ work.description }}" required>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-4 mb-4 mb-sm-0">
+                      <select class="form-control text-center" id="customer" name="customer"  data-toggle="tooltip" title="Cliente" required>
+                        <!--<option></option>-->
+                        {% for customer in customers %}
+                            <option value={{ customer.id }} {% if customer == wor.customer %} selected {% endif %}>{{ customer.corporate_name }}</option>
+                        {% endfor %}
+                      </select>
+                </div>
+                <div class="col-sm-4 mb-4 mb-sm-0">
+                    <input type="date" class="form-control  text-center" id="start_date" name="start_date" data-toggle="tooltip" title="Previsão de início"
+                      placeholder="Previsão de início" value="{{ work.get_eng_start_date }}" >
+                </div>
+                <div class="col-sm-4 mb-4 mb-sm-0">
+                    <input type="date" class="form-control  text-center" id="end_date" name="end_date" data-toggle="tooltip" title="Previsão de finalização"
+                      placeholder="Previsão de finalização" value="{{ work.get_eng_end_date }}" >
+                </div>
+              </div>
+              <div class="form-group row">
+               <div class="col-sm-6 mb-6 mb-sm-0">
+                    <input type="address" class="form-control text-center money" id="budget" name="budget" data-toggle="tooltip" title="Valor do Orçamento"
+                      placeholder="Valor do Orçamento" value="{{ work.budget | floatformat:2}}">
+                </div>
+               <div class="col-sm-6 mb-6 mb-sm-0">
+                    <input type="address" class="form-control text-center money" id="nfe_value" name="nfe_value" data-toggle="tooltip" title="Valor da NFE"
+                      placeholder="Valor da NFE" value="{{ work.nfe_value | floatformat:2}}">
+                </div>
+              </div>
+              <hr>
+              <div class="form-group row">
+               <div class="col-sm-10 mb-3 mb-sm-0">
+                    <input type="address" class="form-control text-center" id="address" name="address" data-toggle="tooltip" title="Endereço"
+                      placeholder="Endereço" value="{{ work.address }}" required>
+                </div>
+               <div class="col-sm-2 mb-3 mb-sm-0">
+                  <input type="number" class="form-control text-center" id="address_number" name="address_number" data-toggle="tooltip" title="Número"
+                    placeholder="Nº" value="{{ work.address_number }}" max="99999">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-3 mb-3 mb-sm-0">
+                  <input type="text" class="form-control text-center" id="adjunct" name="adjunct" data-toggle="tooltip" title="Complemento"
+                    placeholder="Complemento" value="{{ work.adjunct }}">
+                </div>
+                <div class="col-sm-3 mb-3 mb-sm-0">
+                  <input type="text" class="form-control text-center cep" id="cep" name="cep" data-toggle="tooltip" title="CEP"
+                    placeholder="Cep" value="{{ work.cep }}">
+                </div>
+                <div class="col-sm-3 mb-3 mb-sm-0">
+                  <input type="text" class="form-control text-center" id="neighborhood" name="neighborhood" data-toggle="tooltip" title="Bairro"
+                    placeholder="Bairro" value="{{ work.neighborhood }}">
+                </div>
+                <div class="col-sm-3">
+                  <input type="text" class="form-control text-center" id="city" name="city" data-toggle="tooltip" title="Cidade"
+                    placeholder="Cidade" value="{{ work.city }}">
+                </div>
+              </div>
+
+              {% if work %}
+                  <div class="form-group row">
+                    <div class="col-sm-3 mb-3 mb-sm-0">
+                          <button type="button" class="btn btn-secondary btn-user btn-block" data-toggle="modal" data-target="#employees_modal">
+                            Ver/Vincular Colaboradores
+                          </button>
+                     </div>
+                  </div>
+              {% endif %}
+
+              <button type="submit" class="btn btn-primary btn-user btn-block">
+                {% if work %}Alterar {% else %}Cadastrar {% endif %}
+              </button>
+              <hr>
+            </form>
+            <form enctype="multipart/form-data" class="user" action="/work/employees/submit" method="POST">{% csrf_token %}
+                <input type="number" class="form-control" name="work_id_we" value="{{ work.id }}" hidden>
+              <div class="modal" id="employees_modal">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <h4 class="modal-title">Coladoradores</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                      <h4><b>Coladoradores</b></h4>
+
+                        <!--<label><b>Descrição</b></label>-->
+
+                        <div id="div-activitys">
+                            {% if work_employees %}
+                                {% for work_employee in work_employees %}
+                                    <div class="row" id="12">
+                                        <div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">
+                                            <input class="form-control" id="id[]" name="id[]" type="hidden" value="{{ work_employee.employee.id }}" >
+                                            <div class="form-group">
+                                              <select class="form-control text-center" d="name[]" name="name[]">
+                                                    <option value={{ work_employee.employee.id }}>{{ work_employee.employee.external_id}} - {{ work_employee.employee.user.get_full_name }}</option>
+                                              </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2 mb-2 mb-sm-0">
+                                            <button type="button" id="remove-activity-button" title="Excluir Nota" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                    <div class="row" id="12">
+                                        <div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">
+                                            <div class="form-group">
+                                              <select class="form-control text-center" d="name[]" name="name[]" required>
+                                                {% for employee in employees %}
+                                                    <option value={{ employee.id }}>{{ employee.external_id}} - {{ employee.user.get_full_name }}</option>
+                                                {% endfor %}
+                                              </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2 mb-2 mb-sm-0">
+                                            <button type="button" id="remove-activity-button" title="Excluir Nota" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
+                                        </div>
+                                    </div>
+                            {% endif %}
+                        </div>
+                       <div class="form-group row">
+                         <div class="col-sm-12 mb-12 mb-sm-0">
+                            <button type="button" id="add-activity-button" class="btn  btn-secondary btn-user">Adicionar Colaborador</button>
+                         </div>
+                       </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                      <div class="form-group row">
+                        <div class="col-sm-12 mb-12 mb-sm-0">
+                          <button type="submit" id="save-activity-button" class="btn btn-primary btn-user">Salvar</button>
+                          <button type="button" class="btn btn-danger btn-user" data-dismiss="modal">Sair</button>
+                         </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+    console.log({{ employess }});
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+<script id="activity-template" type="text/x-jsrender">
+  {% verbatim %}
+        <div class="row" id="">
+            <div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">
+                <input class="form-control" id="1" name="1" type="hidden" value="1" >
+                <div class="form-group">
+                    <select class="form-control text-center" d="name[]" name="name[]" required>
+                        {{for employees}}
+                            <option value="{{:id }}">{{:external_id}} - {{:name }}</option>
+                        {{/for}}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 mb-2 mb-sm-0">
+                <button type="button" id="remove-activity-button" title="Excluir Nota" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
+            </div>
+        </div>
+  {% endverbatim %}
+</script>
+<script src="{% static 'app/js/jsrender.min.js' %}"></script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#add-activity-button').on('click', function(e){
+            $.ajax({
+                url: "/employee/get_free/",
+                type: "GET",
+                success: function (json) {
+                    var tmpl = $.templates("#activity-template");
+                    console.log(json);
+                    //components = {"employess": employees};
+                    var html = tmpl.render(json);
+                    $("#div-activitys").append($(html));
+                }
+        });
+            var tmpl = $.templates("#activity-template");
+//            components = {name: 'teste', id: '123' };
+            //var employess = "{{ employess }}";
+            //console.log({{ employess }});
+            //components = {"employess": employess};
+            //var html = tmpl.render();
+            //$("#div-activitys").append($(html));
+        });
+        $(document).on('click', '.delete-activity-button', function(e){
+            $(this).parent().parent().remove();
+        });
+    });
+
+</script>
+{% endblock %}

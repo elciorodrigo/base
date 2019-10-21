@@ -68,11 +68,72 @@
                 </div>
               </div>
 
+              {% if customer %}
+                  <div class="form-group row">
+                    <div class="col-sm-3 mb-3 mb-sm-0">
+                          <button type="button" class="btn btn-secondary btn-user btn-block" data-toggle="modal" data-target="#note_modal">
+                            Notas
+                          </button>
+                     </div>
+                  </div>
+              {% endif %}
+
               <button type="submit" class="btn btn-primary btn-user btn-block">
                 {% if customer %}Alterar {% else %}Cadastrar {% endif %}
               </button>
               <hr>
+            </form>
+            <form enctype="multipart/form-data" class="user" action="notes/submit" method="POST">{% csrf_token %}
+                <input type="number" class="form-control" name="customer_id_note" value="{{ customer.id }}" hidden>
+              <div class="modal" id="note_modal">
+                <div class="modal-dialog">
+                  <div class="modal-content">
 
+                    <div class="modal-header">
+                      <h4 class="modal-title">Notas</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                      <h4><b>Notas</b></h4>
+
+                        <!--<label><b>Descrição</b></label>-->
+
+                        <div id="div-activitys">
+                            {% for note in notes %}
+                                <div class="row" id="12">
+                                    <div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">
+                                        <input class="form-control" id="id[]" name="id[]" type="hidden" value="{{ note.id }}" >
+                                        <div class="form-group">
+                                            <input class="form-control" id="name[]" name="name[]" type="text" value="{{ note.description }}" maxlength="250" data-toggle="tooltip" title="{{ note.description }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 mb-2 mb-sm-0">
+                                        <button type="button" id="remove-activity-button" title="Excluir Nota" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                       <div class="form-group row">
+                         <div class="col-sm-12 mb-12 mb-sm-0">
+                            <button type="button" id="add-activity-button" class="btn  btn-secondary btn-user">Adicionar Nota</button>
+                         </div>
+                       </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                      <div class="form-group row">
+                        <div class="col-sm-12 mb-12 mb-sm-0">
+                          <button type="submit" id="save-activity-button" class="btn btn-primary btn-user">Salvar</button>
+                          <button type="button" class="btn btn-danger btn-user" data-dismiss="modal">Sair</button>
+                         </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
             </form>
           </div>
         </div>
@@ -82,11 +143,42 @@
 
 </div>
 
-<script>
+{% endblock %}
 
-$(document).ready(function(){
-  $('[data-toggle="tooltip"]').tooltip();
-});
+{% block scripts %}
+<script id="activity-template" type="text/x-jsrender">
+  {% verbatim %}
+        <div class="row" id="">
+            <div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">
+                <input class="form-control" id="1" name="1" type="hidden" value="1" >
+                <div class="form-group">
+                    <input class="form-control validate" id="name[]" name="name[]" type="text" value="" maxlength="250" required>
+                </div>
+            </div>
+            <div class="col-sm-2 mb-2 mb-sm-0">
+                <button type="button" id="remove-activity-button" title="Excluir Nota" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
+            </div>
+        </div>
+  {% endverbatim %}
 </script>
+<script src="{% static 'app/js/jsrender.min.js' %}"></script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#add-activity-button').on('click', function(e){
+            var tmpl = $.templates("#activity-template");
+//            components = {name: 'teste', id: '123' };
+             var list = [];
+            list.push({name: 'teste', id: '123' });
+            list.push({name: 'teste2', id: '321' });
+            components = {list: list};
+            var html = tmpl.render(components);
+            $("#div-activitys").append($(html));
+        });
+        $(document).on('click', '.delete-activity-button', function(e){
+            $(this).parent().parent().remove();
+        });
+    });
 
+</script>
 {% endblock %}

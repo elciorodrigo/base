@@ -105,11 +105,78 @@ class Media(models.Model):
     def __str__(self):
         return self.file_name
 
-    def get_media(self):
-        #encoded = self.file.encode('ascii')
-        #import base64
-        #encoded = base64.b64encode(self.file)
-        return self.file
+    def get_file(self):
+        import base64
+        encoded = str(base64.b64encode(self.file))
+        return encoded[2:len(encoded)-1]
+        #return self.file
 
     class Meta:
         db_table = 'media'
+
+
+class NoteCustomer(models.Model):
+    description = models.CharField(max_length=250)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{} - {}'.format(self.id, self.customer.corporate_name)
+
+    class Meta:
+        db_table = 'note_customer'
+
+
+class Work(models.Model):
+    description = models.CharField(max_length=250)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    address = models.CharField(max_length=50)
+    address_number = models.CharField(max_length=5)
+    adjunct = models.CharField(max_length=50, blank=True, null=True)
+    cep = models.CharField(max_length=10, blank=True, null=True)
+    city = models.CharField(max_length=50, blank=True, null=True)
+    neighborhood = models.CharField(max_length=100, blank=True, null=True)
+    crated_date = models.DateField(auto_now_add=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    budget = models.FloatField(blank=True, null=True)
+    nfe_value = models.FloatField(blank=True, null=True)
+    finished = models.BooleanField(default=False)
+
+    def __str__(self):
+        return '{} - {}'.format(self.id, self.description)
+
+    def get_eng_start_date(self):
+        if self.start_date:
+            return datetime.strftime(self.start_date, '%Y-%m-%d')
+        return ''
+
+    def get_format_start_date(self):
+        if self.start_date:
+            return datetime.strftime(self.start_date, '%d/%m/%Y')
+        return ''
+
+    def get_eng_end_date(self):
+        if self.end_date:
+            return datetime.strftime(self.end_date, '%Y-%m-%d')
+        return ''
+
+    def get_format_end_date(self):
+        if self.end_date:
+            return datetime.strftime(self.end_date, '%d/%m/%Y')
+        return ''
+
+    class Meta:
+        db_table = 'work'
+
+
+class EmployeeWork(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    work = models.ForeignKey(Work, on_delete=models.DO_NOTHING)
+    start_date = models.DateField(auto_now_add=True)
+    end_date = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} - {}'.format(self.employee.user.get_full_name(), self.work.description)
+
+    class Meta:
+        db_table = 'employee_work'

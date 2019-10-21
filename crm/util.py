@@ -14,3 +14,4 @@ def remage(image_to_remage, width):
     output = io.BytesIO()
     image.save(output, format='png')
     return output.getvalue()
+

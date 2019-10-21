@@ -1,11 +1,22 @@
-SPRINT 1 
+Horas utilizadas
+SPRINT 1
+    - Colaboradores - 4h
+    - Ferramentas - 4h
+    - Cliente - 4h
+    - Arquivos - 8h
+
+SPRINT 2
+    - Criação de observações - 4h
+    - Abertura de Obras - 5h
+
+SPRINT 1
 	Arquitetura 
 	-Cadastros gerais
 		-Colaboradores (logins/senhas/Permissões de acesso/documentos)  6h
 		-Ferramentas 6h
 		-Clientes 6h
 		-Veiculos (ver depois)
-		-Arquivos(funcionários - PPRA PCMSO CNDs / fotos/pdfs) - Redimensionamento	de imagens 15h
+		-Arquivos(funcionários - PPRA PCMSO CNDs / fotos/pdfs) - Redimensionamento de imagens 15h
 		
 		
 SPRINT 2 
@@ -23,3 +34,47 @@ SPRINT 3
 		-Relatório de Andamento 
 		-Relatório final
 		-Relatório dos funcionários
+
+
+
+no cliente acrescentar detalhes. será uma lista de detalhes/observações
+
+
+tipo cliente só tem energia de 220v
+todo funcionario deve ir com cracha
+
+------
+abertura de obra
+
+número ID-pk (obrigatorio)
+descrição  (obrigatorio)
+selecionar o cliente (obrigatorio)
+local da obra (execução) (obrigatorio)
+
+alocar os funcionarios N (funcionario não entra em outra obra)
+alocas as ferramentas  N
+previsão (inicial - final)
+------
+valor do orçamento (centro de custo depois)
+
+valor da NFE
+número da NFE
+Finalizar obra (botão) - ao finalizar, os funcionários são desalocados
+
+-------------
+
+Apontamento de horas
+uploads
+
+
+
+##########################
+relatório de inicio de obras
+descrição
+funcionários
+ferramentas
+- observaçõe do cliente
+
+
+tela de listagem ***fazer
+id nome do cliente descrição do servico e previsão inicial e previsão final

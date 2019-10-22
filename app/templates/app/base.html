@@ -560,12 +560,21 @@
     <script src="{% static 'app/js/demo/chart-area-demo.js'%}"></script>
     <script src="{% static 'app/js/demo/chart-pie-demo.js'%}"></script>
 
-    
+
     <script src="{% static 'app/vendor/datatables/jquery.dataTables.min.js'%}"></script>
     <script src="{% static 'app/vendor/datatables/dataTables.bootstrap4.min.js'%}"></script>
     <script src="{% static 'app/js/demo/datatables-demo.js'%}"></script>
 
     <script src="{% static 'app/mask/jQuery-Mask/distribuicao/jquery.mask.min.js' %}"></script>
+
+     <!-- Custom DataTable-->
+    <link href="{% static 'app/custom/datatable/jquery.dataTables.min.css'%}" rel="stylesheet" type="text/css">
+    <link href="{% static 'app/custom/datatable/responsive.dataTables.min.css'%}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{% static 'app/custom/datatable/jquery.dataTables.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'app/custom/datatable/dataTables.responsive.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'app/custom/datatable/datatables.min.js'%}"></script>
+
+
 </body>
 <script>
       $('.money').mask('#.##0,00', { reverse: true });

@@ -1,3 +1,7 @@
+import os
+import dj_database_url
+
+
 """
 Django settings for admin project.
 

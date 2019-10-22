@@ -2,9 +2,11 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from .controller import set_employee, set_customer, set_tools, set_media, set_work
 from .models import Employee, Position, Customer, Tools, Media, NoteCustomer, Work, EmployeeWork
+from django.contrib.auth.decorators import login_required
 
 from django.core.exceptions import ObjectDoesNotExist
 
+@login_required(login_url='../login')
 def employee(request, employee_id=False):
     response = {}
     if request.method == 'POST':
@@ -24,12 +26,13 @@ def employee(request, employee_id=False):
         response['position'] = position
         return render(request, 'employee.html', response)
 
-
+@login_required(login_url='../login')
 def employee_list(request):
     employee = Employee.objects.filter(user__is_active=True)
     return render(request, 'employee-list.html', {'employee':employee})
 
 
+@login_required(login_url='../login')
 def customer(request, customer_id=False):
     response = {}
     if request.method == 'POST':
@@ -49,12 +52,12 @@ def customer(request, customer_id=False):
                 return render(request, 'app/404.html', {})
         return render(request, 'customer.html', response)
 
-
+@login_required(login_url='../login')
 def customer_list(request):
     customer = Customer.objects.all()
     return render(request, 'customer-list.html', {'customer':customer})
 
-
+@login_required(login_url='../login')
 def tools(request, tools_id=False):
     response = {}
     if request.method == 'POST':
@@ -72,12 +75,12 @@ def tools(request, tools_id=False):
                 return render(request, 'app/404.html', {})
         return render(request, 'tools.html', response)
 
-
+@login_required(login_url='../login')
 def tools_list(request):
     tools = Tools.objects.all()
     return render(request, 'tools-list.html', {'tools':tools})
 
-
+@login_required(login_url='../login')
 def media(request, media_id=False):
     response = {}
     if request.POST:
@@ -98,6 +101,7 @@ def media(request, media_id=False):
 
     return render(request, 'media.html', response)
 
+@login_required(login_url='../login')
 def set_notes(request):
     list_id = request.POST.getlist('id[]')
     list_name = request.POST.getlist('name[]')
@@ -118,6 +122,7 @@ def set_notes(request):
     redirect_url = '/customer/{}'.format(customer_id)
     return HttpResponseRedirect(redirect_url)
 
+@login_required(login_url='../login')
 def get_free_employee(request):
     employees = Employee.objects.filter().extra(where=['employee.id not in (select emp.employee_id from employee_work emp where end_date is null)']).order_by('user__first_name')
     employees_list = [{'id':employee.id, 'external_id':employee.external_id, 'name': employee.user.get_full_name()}  for employee in employees]
@@ -125,6 +130,7 @@ def get_free_employee(request):
     print(response)
     return JsonResponse(response)
 
+@login_required(login_url='../login')
 def work(request, work_id=False):
     response = {}
     if request.method == 'POST':
@@ -142,14 +148,14 @@ def work(request, work_id=False):
                 return render(request, 'app/404.html', {})
         customers = Customer.objects.all()
         employees = Employee.objects.filter().extra(where=['employee.id not in (select emp.employee_id from employee_work emp where end_date is null)']).order_by('user__first_name')
-        work_employees = EmployeeWork.objects.filter(work=work, end_date__isnull=True)
+        #work_employees = EmployeeWork.objects.filter(work=work, end_date__isnull=True)
         response['customers'] = customers
         response['employees'] = employees
-        response['work_employees'] = work_employees
+        #response['work_employees'] = work_employees
         print(response)
         return render(request, 'work.html', response)
 
-
+@login_required(login_url='../login')
 def set_work_employess(request):
     from datetime import datetime
     list_work_employees = request.POST.getlist('id[]')

@@ -16,8 +16,8 @@
                 <table class="table table-bordered display responsive nowrap" id="my_table" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>Razão Social</th>
+                      <th>ID</th>
                       <th>CNPJ</th>
                       <th>I.E</th>
                       <th>Telefone Principal</th>
@@ -27,8 +27,8 @@
                   <tbody>
                   {% for cust in customer %}
                     <tr>
+                      <td><a href='../customer/{{ cust.id }}'>{{ cust.corporate_name }}</a></td>
                       <td><a href='../customer/{{ cust.id }}'>{{ cust.id }}</a></td>
-                      <td>{{ cust.corporate_name }}</td>
                       <td>{{ cust.cnpj }}</td>
                       <td>{{ cust.state_registration }}</td>
                       <td>{{ cust.phone }}</td>

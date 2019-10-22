@@ -16,8 +16,8 @@
                 <table class="table table-bordered display responsive nowrap" id="my_table" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Patrimonio</th>
                       <th>Ferramenta</th>
+                      <th>Patrimonio</th>
                       <th>Custo</th>
                       <th>Quantidade</th>
                       <th>Voltagem</th>
@@ -26,8 +26,8 @@
                   <tbody>
                   {% for tool in tools %}
                     <tr>
+                      <td><a href='../tools/{{ tool.id }}'>{{ tool.name }}</a></td>
                       <td><a href='../tools/{{ tool.id }}'>{{ tool.external_id  }}</a></td>
-                      <td>{{ tool.external_id }}</td>
                       <td>R$ {{ tool.get_price }}</td>
                       <td>{{ tool.amount }}</td>
                       <td>{{ tool.voltage }}</td>

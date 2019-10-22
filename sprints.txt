@@ -4,6 +4,7 @@ SPRINT 1
     - Ferramentas - 4h
     - Cliente - 4h
     - Arquivos - 8h
+    - Estilizar tela de listagem - 3h
 
 SPRINT 2
     - Criação de observações - 4h

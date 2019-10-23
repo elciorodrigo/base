@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Employee, Position, Customer, Tools, Media, NoteCustomer, EmployeeWork
+from .models import Employee, Position, Customer, Tools, Media, NoteCustomer, EmployeeWork, Work
 
 
 @admin.register(Employee)
@@ -42,3 +42,8 @@ class EmployeeWorkAdmin(admin.ModelAdmin):
     list_display = ['id', 'employee', 'work']
     search_fields = ('id', )
 
+
+@admin.register(Work)
+class WorkAdmin(admin.ModelAdmin):
+    list_display = ['id', 'customer', 'description']
+    search_fields = ('id', )

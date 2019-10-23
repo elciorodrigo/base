@@ -176,3 +176,9 @@ def set_work_employess(request):
     print(list_work_employees)
     redirect_url = '/work/{}'.format(work_id)
     return HttpResponseRedirect(redirect_url)
+
+
+@login_required(login_url='../login')
+def work_list(request):
+    work = Work.objects.all()
+    return render(request, 'work-list.html', {'works':work})

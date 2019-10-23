@@ -23,6 +23,6 @@ urlpatterns = [
 
     path('work/', views.work, name='work'),
     path('work/<slug:work_id>', views.work, name='get_work'),
-    #path('work-list', views.customer_list, name='work_list'),
+    path('work-list', views.work_list, name='work_list'),
     path('work/employees/submit', views.set_work_employess, name='set_work_employess'),
 ]

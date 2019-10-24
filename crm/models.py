@@ -51,18 +51,18 @@ class Employee(models.Model):
         return ''
 
     def get_work_customer_name(self):
-        employee = EmployeeWork.objects.filter(employee=self, end_date__isnull=True)
-        customer = employee.get().work.customer.corporate_name if employee else ''
+        employee = EmployeeWork.objects.filter(employee=self, end_date__isnull=True).last()
+        customer = employee.work.customer.corporate_name if employee else ''
         return customer
 
     def get_work_allocated(self):
-        employee = EmployeeWork.objects.filter(employee=self, end_date__isnull=True)
-        work = 'Nº {} - {}'.format(employee.get().work.id, employee.get().work.customer.corporate_name) if employee else ''
+        employee = EmployeeWork.objects.filter(employee=self, end_date__isnull=True).last()
+        work = 'Nº {} - {}'.format(employee.work.id, employee.work.customer.corporate_name) if employee else ''
         return work
 
     def get_work_id(self):
-        employee = EmployeeWork.objects.filter(employee=self, end_date__isnull=True)
-        work_id = employee.get().work.id if employee else ''
+        employee = EmployeeWork.objects.filter(employee=self, end_date__isnull=True).last()
+        work_id = employee.work.id if employee else ''
         return work_id
 
     def __str__(self):

@@ -5,10 +5,12 @@ SPRINT 1
     - Cliente - 4h
     - Arquivos - 8h
     - Estilizar tela de listagem - 3h
+    - Correções de bugs nos cadastro, add alert, alterações de botões - 2h
 
 SPRINT 2
     - Criação de observações - 4h
     - Abertura de Obras - 5h
+    - Alocação de colaboradores - 2h
 
 SPRINT 1
 	Arquitetura 

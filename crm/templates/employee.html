@@ -106,12 +106,19 @@
                 </div>
 
               </div>
-
-              <button type="submit" class="btn btn-primary btn-user btn-block">
-                {% if employee %}Alterar {% else %}Cadastrar {% endif %}
-              </button>
               <hr>
-
+              <div class="form-group row">
+                  <div class="col-sm-4 mb-4 mb-sm-0">
+                  </div>
+                  <div class="col-sm-4 mb-4 mb-sm-0">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        {% if employee %}Alterar {% else %}Cadastrar {% endif %}
+                    </button>
+                  </div>
+                  <div class="col-sm-4 mb-4 mb-sm-0 text-center">
+                  </div>
+              </div>
+              <hr>
             </form>
           </div>
         </div>

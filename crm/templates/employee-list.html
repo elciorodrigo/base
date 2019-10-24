@@ -20,10 +20,9 @@
             <tr >
               <th>Nome</th>
               <th>Matrícula</th>
-              <th>CPF</th>
-              <th>RG</th>
               <th>Data de Admissão</th>
               <th>Cargo</th>
+              <th>Alocado em</th>
             </tr>
           </thead>
           <tbody>
@@ -31,10 +30,11 @@
             <tr>
               <td><a href='../employee/{{ emp.id }}'>{{ emp.user.get_full_name }}</a></td>
               <td><a href='../employee/{{ emp.id }}'>{{ emp.external_id }}</a></td>
-              <td class="cpf">{{ emp.cpf }}</td>
-              <td class="rg">{{ emp.rg }}</td>
+              <!--<td class="cpf">{{ emp.cpf }}</td>-->
+              <!--<td class="rg">{{ emp.rg }}</td>-->
               <td>{{ emp.get_format_start_date }}</td>
               <td>{{ emp.position }}</td>
+              <td><a href='../work/{{ emp.get_work_id }}'>{{ emp.get_work_allocated }}</a></td>
             </tr>
             {% endfor %}
           </tbody>

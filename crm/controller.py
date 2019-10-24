@@ -24,7 +24,7 @@ def set_employee(employee_dict):
     neighborhood = employee_dict.get('neighborhood')
     city = employee_dict.get('city')
     position_id = employee_dict.get('position')
-    salary = float(employee_dict.get('salary').replace('.','').replace(',','')) if employee_dict.get('salary') else None
+    salary = float(employee_dict.get('salary').replace('.','').replace(',','.')) if employee_dict.get('salary') else None
     external_id = employee_dict.get('external_id')
 
     position = Position.objects.get(id=position_id)
@@ -172,15 +172,16 @@ def set_work(work_dict):
     customer_id = work_dict.get('customer')
     end_date  = datetime.strptime(work_dict.get('end_date'), '%Y-%m-%d') if work_dict.get('end_date') else None
     start_date  = datetime.strptime(work_dict.get('start_date'), '%Y-%m-%d') if work_dict.get('start_date') else None
-    budget = float(work_dict.get('budget').replace('.','').replace(',','')) if work_dict.get('budget') else None
-    nfe_value = float(work_dict.get('nfe_value').replace('.','').replace(',','')) if work_dict.get('nfe_value') else None
+    budget = float(work_dict.get('budget').replace('.','').replace(',','.')) if work_dict.get('budget') else None
+    nfe_value = float(work_dict.get('nfe_value').replace('.','').replace(',','.')) if work_dict.get('nfe_value') else None
     address = work_dict.get('address')
     address_number = work_dict.get('address_number')
     adjunct = work_dict.get('adjunct')
     cep = work_dict.get('cep')
     neighborhood = work_dict.get('neighborhood')
     city = work_dict.get('city')
-
+    print(work_dict.get('budget'))
+    print(budget)
     customer = Customer.objects.get(id=customer_id)
     if work_id:
         work = Work.objects.filter(id=work_id)

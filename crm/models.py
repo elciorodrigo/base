@@ -50,6 +50,21 @@ class Employee(models.Model):
             return datetime.strftime(self.start_date, '%d/%m/%Y')
         return ''
 
+    def get_work_customer_name(self):
+        employee = EmployeeWork.objects.filter(employee=self, end_date__isnull=True)
+        customer = employee.get().work.customer.corporate_name if employee else ''
+        return customer
+
+    def get_work_allocated(self):
+        employee = EmployeeWork.objects.filter(employee=self, end_date__isnull=True)
+        work = 'Nº {} - {}'.format(employee.get().work.id, employee.get().work.customer.corporate_name) if employee else ''
+        return work
+
+    def get_work_id(self):
+        employee = EmployeeWork.objects.filter(employee=self, end_date__isnull=True)
+        work_id = employee.get().work.id if employee else ''
+        return work_id
+
     def __str__(self):
         return self.user.get_full_name()
 

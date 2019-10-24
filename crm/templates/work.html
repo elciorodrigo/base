@@ -14,6 +14,11 @@
             <div class="text-center">
               <h1 class="h4 text-gray-900 mb-4">{% if work %}Obra Nº {{ work.id}}{% else %}Abrir Obra {% endif %}</h1>
             </div>
+
+              <div id="alert_update" class="alert alert-success">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  <strong>Sucesso!</strong> Alterações foram completadas. {{ alert }}
+              </div>
             <form enctype="multipart/form-data" class="user" action="submit" method="POST">{% csrf_token %}
                 <input type="number" class="form-control" name="work_id" value="{{ work.id }}" hidden>
               <div class="form-group ">
@@ -78,21 +83,48 @@
                     placeholder="Cidade" value="{{ work.city }}">
                 </div>
               </div>
+                <hr>
 
-              {% if work %}
                   <div class="form-group row">
-                    <div class="col-sm-3 mb-3 mb-sm-0">
-                          <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#employees_modal">
-                            Alocar Colaboradores
-                          </button>
-                     </div>
+                    {% if work %}
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                              <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#employees_modal">
+                                Alocar Colaboradores
+                              </button>
+                         </div>
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                              <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#employees_modal">
+                                Alocar Ferramentas
+                              </button>
+                         </div>
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                              <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#employees_modal">
+                                Adicionar Atividade
+                              </button>
+                         </div>
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                              <button type="submit" class="btn btn-primary btn-block">
+                                {% if work %}Alterar {% else %}Cadastrar {% endif %}
+                              </button>
+                         </div>
+                    {% else %}
+                          <div class="col-sm-4 mb-4 mb-sm-0">
+                          </div>
+                          <div class="col-sm-4 mb-4 mb-sm-0">
+                              <button type="submit" class="btn btn-primary btn-block">
+                                {% if work %}Alterar {% else %}Cadastrar {% endif %}
+                              </button>
+                         </div>
+                         <div class="col-sm-4 mb-4 mb-sm-0 text-center">
+                         </div>
+                   {% endif %}
                   </div>
-              {% endif %}
 
-              <button type="submit" class="btn btn-primary btn-user btn-block">
-                {% if work %}Alterar {% else %}Cadastrar {% endif %}
-              </button>
-              <hr>
+                <hr>
+              <!--<button type="submit" class="btn btn-primary btn-block">-->
+                <!--{% if work %}Alterar {% else %}Cadastrar {% endif %}-->
+              <!--</button>-->
+
             </form>
             <form enctype="multipart/form-data" class="user" action="/work/employees/submit" method="POST">{% csrf_token %}
                 <input type="number" class="form-control" name="work_id_we" value="{{ work.id }}" hidden>
@@ -111,14 +143,14 @@
                         <!--<label><b>Descrição</b></label>-->
 
                         <div id="div-activitys">
-                            {% if work_employees %}
-                                {% for work_employee in work_employees %}
+                            {% if employees_work %}
+                                {% for employee_work in employees_work %}
                                     <div class="row" id="12">
                                         <div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">
-                                            <input class="form-control" id="id[]" name="id[]" type="hidden" value="{{ work_employee.employee.id }}" >
+                                            <input class="form-control" id="id[]" name="id[]" type="hidden" value="{{ employee_work.employee.id }}" >
                                             <div class="form-group">
                                               <select class="form-control text-center" d="name[]" name="name[]">
-                                                    <option value={{ work_employee.employee.id }}>{{ work_employee.employee.external_id}} - {{ work_employee.employee.user.get_full_name }}</option>
+                                                    <option value={{ work_employee.employee.id }}>{{ employee_work.employee.external_id}} - {{ employee_work.employee.user.get_full_name }}</option>
                                               </select>
                                             </div>
                                         </div>
@@ -127,21 +159,21 @@
                                         </div>
                                     </div>
                                 {% endfor %}
-                            {% else %}
-                                    <div class="row" id="12">
-                                        <div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">
-                                            <div class="form-group">
-                                              <select class="form-control text-center" d="name[]" name="name[]" required>
-                                                {% for employee in employees %}
-                                                    <option value={{ employee.id }}>{{ employee.external_id}} - {{ employee.user.get_full_name }}</option>
-                                                {% endfor %}
-                                              </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 mb-2 mb-sm-0">
-                                            <button type="button" id="remove-activity-button" title="Excluir Nota" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
-                                        </div>
-                                    </div>
+
+                                    <!--<div class="row" id="12">-->
+                                        <!--<div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">-->
+                                            <!--<div class="form-group">-->
+                                              <!--<select class="form-control text-center" d="name[]" name="name[]" required>-->
+                                                <!--{% for employee in employees %}-->
+                                                    <!--<option value={{ employee.id }}>{{ employee.external_id}} - {{ employee.user.get_full_name }}</option>-->
+                                                <!--{% endfor %}-->
+                                              <!--</select>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-sm-2 mb-2 mb-sm-0">-->
+                                            <!--<button type="button" id="remove-activity-button" title="Excluir Nota" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
                             {% endif %}
                         </div>
                        <div class="form-group row">
@@ -173,9 +205,7 @@
 
 </div>
 
-<script>
-    console.log({{ employess }});
-</script>
+
 
 {% endblock %}
 
@@ -202,6 +232,7 @@
 <script src="{% static 'app/js/jsrender.min.js' %}"></script>
 <script>
     $(document).ready(function(){
+        $("#alert_update").hide();
         $('[data-toggle="tooltip"]').tooltip();
         $('#add-activity-button').on('click', function(e){
             $.ajax({
@@ -226,6 +257,12 @@
         $(document).on('click', '.delete-activity-button', function(e){
             $(this).parent().parent().remove();
         });
+
+        const params = new URLSearchParams(document.location.search);
+        const show_alert = params.get("a");
+        if (show_alert) {
+            $("#alert_update").show();
+        };
     });
 
 </script>

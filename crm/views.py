@@ -137,30 +137,31 @@ def work(request, work_id=False):
         work = set_work(
             request.POST
         )
-        redirect_url = '{}'.format(work.id)
+        redirect_url = '{}?a=1'.format(work.id)
         return HttpResponseRedirect(redirect_url)
     elif request.method == 'GET':
         if work_id:
             try:
                 work = Work.objects.get(id=work_id)
+                employees_work = EmployeeWork.objects.filter(work=work, end_date__isnull=True)
+                response['employees_work'] = employees_work
                 response['work'] = work
             except ObjectDoesNotExist:
                 return render(request, 'app/404.html', {})
         customers = Customer.objects.all()
         employees = Employee.objects.filter().extra(where=['employee.id not in (select emp.employee_id from employee_work emp where end_date is null)']).order_by('user__first_name')
-        #work_employees = EmployeeWork.objects.filter(work=work, end_date__isnull=True)
         response['customers'] = customers
         response['employees'] = employees
-        #response['work_employees'] = work_employees
-        print(response)
         return render(request, 'work.html', response)
 
 @login_required(login_url='../login')
-def set_work_employess(request):
+def set_work_employees(request):
     from datetime import datetime
+    print('aew')
     list_work_employees = request.POST.getlist('id[]')
     list_all_employees = request.POST.getlist('name[]')
     work_id = request.POST.get('work_id_we')
+    print('aew2')
     print(list_all_employees)
     print(list_work_employees)
     for i in range(len(list_all_employees)):
@@ -170,11 +171,14 @@ def set_work_employess(request):
         if i >= len(list_work_employees):
             employees_work = EmployeeWork.objects.create(employee_id=list_all_employees[i], work_id=work_id)
             list_work_employees.append(list_all_employees[i])
-    EmployeeWork.objects.filter(work_id=work_id).exclude(employee_id__in=list_all_employees).update(end_date=datetime.now())
-    print('-----')
-    print(list_all_employees)
-    print(list_work_employees)
-    redirect_url = '/work/{}'.format(work_id)
+    list_excluded = []
+    for l in list_work_employees:
+        try:
+            list_excluded.append(int(l))
+        except:
+            pass
+    EmployeeWork.objects.filter(work_id=work_id).exclude(employee_id__in=list_excluded).update(end_date=datetime.now())
+    redirect_url = '/work/{}?a=1'.format(work_id)
     return HttpResponseRedirect(redirect_url)
 
 

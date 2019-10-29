@@ -14,6 +14,13 @@ class Position(models.Model):
         db_table = 'name'
 
 
+class Product(models.Model):
+    desc = models.CharField(max_length=250, blank=True, null=True)
+    url = models.CharField(max_length=250, blank=True, null=True)
+    cod_in = models.CharField(max_length=250, blank=True, null=True)
+    ean = models.CharField(max_length=250, blank=True, null=True)
+
+
 class Employee(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     place = models.CharField(max_length=50, blank=True, null=True)

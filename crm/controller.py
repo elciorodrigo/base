@@ -1,9 +1,27 @@
 __author__ = 'rafeg'
 
-from .models import Employee, Position, Customer, Tools, Media, Work
+from .models import Employee, Position, Customer, Tools, Media, Work, Product
 from .util import remage
 from django.contrib.auth.models import User
 from datetime import datetime
+
+
+def set_product(product_dict):
+    product_id = product_dict.get('product_id')
+    desc = product_dict.get('desc')
+    url = product_dict.get('url')
+    cod_in = product_dict.get('cod_in')
+    ean = product_dict.get('ean')
+    print('teste')
+    if product_id:
+        product = Product.objects.filter(id=product_id)
+        if product:
+            product.update(desc = desc,url = url,cod_in = cod_in,ean = ean)
+            product = product.get()
+            return product
+    product = Product.objects.create(desc = desc,url = url,cod_in = cod_in,ean = ean)
+    return product        
+
 
 
 def set_employee(employee_dict):

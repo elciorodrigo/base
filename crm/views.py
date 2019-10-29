@@ -1,10 +1,36 @@
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from .controller import set_employee, set_customer, set_tools, set_media, set_work
-from .models import Employee, Position, Customer, Tools, Media, NoteCustomer, Work, EmployeeWork
+from .controller import set_employee, set_customer, set_tools, set_media, set_work, set_product
+from .models import Employee, Position, Customer, Tools, Media, NoteCustomer, Work, EmployeeWork, Product
 from django.contrib.auth.decorators import login_required
 
 from django.core.exceptions import ObjectDoesNotExist
+
+
+@login_required(login_url='../login')
+def product(request, product_id=False):
+    response = {}
+    if request.method == 'POST':
+        product = set_product(
+            request.POST
+        )
+        redirect_url = '{}'.format(product.id)
+        return HttpResponseRedirect(redirect_url)
+    elif request.method == 'GET':
+        if product_id:
+            try:
+                product = Product.objects.get(id=product_id)
+                response['product'] = product
+            except ObjectDoesNotExist:
+                return render(request, 'app/404.html', {})
+        return render(request, 'product.html', response)
+
+
+@login_required(login_url='../login')
+def product_list(request):
+    product = Product.objects.all()
+    return render(request, 'product-list.html', {'product':product})
+
 
 @login_required(login_url='../login')
 def employee(request, employee_id=False):
@@ -24,7 +50,7 @@ def employee(request, employee_id=False):
                 return render(request, 'app/404.html', {})
         position = Position.objects.filter(active=True)
         response['position'] = position
-        return render(request, 'employee.html', response)
+        return render(request, 'product.html', response)
 
 @login_required(login_url='../login')
 def employee_list(request):

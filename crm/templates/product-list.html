@@ -6,35 +6,33 @@
 <div class="container-fluid">
 
   <!-- Page Heading -->
-  <h1 class="h3 mb-2 text-gray-800">Colaboradores</h1>
+  <h1 class="h3 mb-2 text-gray-800">Produtos</h1>
 
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Lista de Colaboradores</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Lista de Produtos</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-bordered display responsive nowrap" id="my_table" width="100%" cellspacing="0">
           <thead>
             <tr >
-              <th>Nome</th>
-              <th>Matrícula</th>
-              <th>Data de Admissão</th>
-              <th>Cargo</th>
-              <th>Alocado em</th>
+              <th>Descrição</th>
+              <th>Link Imagem</th>
+              <th>Código Interno</th>
+              <th>Ean</th>
             </tr>
           </thead>
           <tbody>
-            {% for emp in employee %}
+            {% for p in product %}
             <tr>
-              <td><a href='../employee/{{ emp.id }}'>{{ emp.user.get_full_name }}</a></td>
-              <td><a href='../employee/{{ emp.id }}'>{{ emp.external_id }}</a></td>
+              <td><a href='../products/{{ emp.id }}'>{{ p.desc }}</a></td>
+              <td><a href='{{p.url}}'  target='_blank'>Visualizar</a></td>
               <!--<td class="cpf">{{ emp.cpf }}</td>-->
               <!--<td class="rg">{{ emp.rg }}</td>-->
-              <td>{{ emp.get_format_start_date }}</td>
-              <td>{{ emp.position }}</td>
-              <td><a href='../work/{{ emp.get_work_id }}'>{{ emp.get_work_allocated }}</a></td>
+              <td>{{ p.cod_in }}</td>
+              <td>{{ p.ean }}</td>
             </tr>
             {% endfor %}
           </tbody>

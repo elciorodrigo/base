@@ -4,25 +4,30 @@ from .models import Employee, Position, Customer, Tools, Media, Work, Product
 from .util import remage
 from django.contrib.auth.models import User
 from datetime import datetime
+from decimal import Decimal
 
 
 def set_product(product_dict):
     product_id = product_dict.get('product_id')
+    num = product_dict.get('num')
     desc = product_dict.get('desc')
-    url = product_dict.get('url')
-    cod_in = product_dict.get('cod_in')
-    ean = product_dict.get('ean')
-    print('teste')
+    price = transformeDecimal(product_dict.get('price',''))
+    comp = transformeDecimal(product_dict.get('comp',''))
+    alt = transformeDecimal(product_dict.get('alt',''))
+    larg = transformeDecimal(product_dict.get('larg',''))
+    obs = product_dict.get('obs')
+   
     if product_id:
         product = Product.objects.filter(id=product_id)
         if product:
-            product.update(desc = desc,url = url,cod_in = cod_in,ean = ean)
+            product.update(num = num, desc = desc, price = price, comp = comp, alt = alt, larg = larg, obs = obs)
             product = product.get()
             return product
-    product = Product.objects.create(desc = desc,url = url,cod_in = cod_in,ean = ean)
+    product = Product.objects.create(num = num, desc = desc, price = price, comp = comp, alt = alt, larg = larg, obs = obs)
     return product        
 
-
+def transformeDecimal(value):
+    return value.replace('.','').replace('.','').replace(',','.')
 
 def set_employee(employee_dict):
     first_name = employee_dict.get('first_name')

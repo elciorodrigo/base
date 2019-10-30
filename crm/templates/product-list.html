@@ -18,21 +18,19 @@
         <table class="table table-bordered display responsive nowrap" id="my_table" width="100%" cellspacing="0">
           <thead>
             <tr >
+              <th>Número</th>
               <th>Descrição</th>
-              <th>Link Imagem</th>
-              <th>Código Interno</th>
-              <th>Ean</th>
+              <th>Alocado</th>
             </tr>
           </thead>
           <tbody>
             {% for p in product %}
             <tr>
-              <td><a href='../products/{{ emp.id }}'>{{ p.desc }}</a></td>
-              <td><a href='{{p.url}}'  target='_blank'>Visualizar</a></td>
+              <td><a href='../product/{{p.id}}'>{{ p.num }}</a></td>
+              <td>{{ p.desc }}</a></td>
               <!--<td class="cpf">{{ emp.cpf }}</td>-->
               <!--<td class="rg">{{ emp.rg }}</td>-->
-              <td>{{ p.cod_in }}</td>
-              <td>{{ p.ean }}</td>
+              <td></td>
             </tr>
             {% endfor %}
           </tbody>

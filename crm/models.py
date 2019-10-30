@@ -15,11 +15,13 @@ class Position(models.Model):
 
 
 class Product(models.Model):
+    num = models.CharField(max_length=250, blank=True, null=True)
     desc = models.CharField(max_length=250, blank=True, null=True)
-    url = models.CharField(max_length=250, blank=True, null=True)
-    cod_in = models.CharField(max_length=250, blank=True, null=True)
-    ean = models.CharField(max_length=250, blank=True, null=True)
-
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    comp = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    alt = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    larg = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    obs = models.CharField(max_length=250, blank=True, null=True)
 
 class Employee(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

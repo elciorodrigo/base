@@ -18,8 +18,10 @@ def product(request, product_id=False):
         return HttpResponseRedirect(redirect_url)
     elif request.method == 'GET':
         if product_id:
+            print('asdhafuihfdauihfdasf' + product_id)
             try:
                 product = Product.objects.get(id=product_id)
+                print(product)
                 response['product'] = product
             except ObjectDoesNotExist:
                 return render(request, 'app/404.html', {})

@@ -12,7 +12,7 @@
         <div class="col-lg-12">
           <div class="p-5">
             <div class="text-center">
-              <h1 class="h4 text-gray-900 mb-4">{% if work %}Obra Nº {{ work.id}}{% else %}Abrir Obra {% endif %}</h1>
+              <h1 class="h4 text-gray-900 mb-4">{% if work %}Locação Nº {{ work.id}}{% else %}Criar Locação {% endif %}</h1>
             </div>
 
               <div id="alert_update" class="alert alert-success">
@@ -44,15 +44,15 @@
                 </div>
               </div>
               <div class="form-group row">
-               <div class="col-sm-3 mb-3 mb-sm-0">
+               <!-- <div class="col-sm-3 mb-3 mb-sm-0">
                     <input type="address" class="form-control text-center money" id="budget" name="budget" data-toggle="tooltip" title="Valor do Orçamento"
                       placeholder="Valor do Orçamento" value="{{ work.budget | floatformat:2}}">
-                </div>
+                </div> -->
 
-               <div class="col-sm-3 mb-3 mb-sm-0">
+               <!-- <div class="col-sm-3 mb-3 mb-sm-0">
                     <input type="address" class="form-control text-center money" id="nfe_value" name="nfe_value" data-toggle="tooltip" title="Valor da NFE"
                       placeholder="Valor da NFE" value="{{ work.nfe_value | floatformat:2}}">
-                </div>
+                </div> -->
               </div>
               <hr>
               <div class="form-group row">
@@ -89,10 +89,10 @@
                     {% if work %}
                         <div class="col-sm-3 mb-3 mb-sm-0">
                               <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#employees_modal">
-                                Alocar Colaboradores
+                                Alocar Produtos
                               </button>
                          </div>
-                        <div class="col-sm-3 mb-3 mb-sm-0">
+                        <!-- <div class="col-sm-3 mb-3 mb-sm-0">
                               <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#employees_modal">
                                 Alocar Ferramentas
                               </button>
@@ -101,7 +101,7 @@
                               <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#employees_modal">
                                 Adicionar Atividade
                               </button>
-                         </div>
+                         </div> -->
                         <div class="col-sm-3 mb-3 mb-sm-0">
                               <button type="submit" class="btn btn-primary btn-block">
                                 {% if work %}Alterar {% else %}Cadastrar {% endif %}
@@ -133,12 +133,12 @@
                   <div class="modal-content">
 
                     <div class="modal-header">
-                      <h4 class="modal-title">Alocação de colaboradores</h4>
+                      <h4 class="modal-title">Alocar Produtos</h4>
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
 
                     <div class="modal-body">
-                      <h4><b>Coladoradores</b></h4>
+                      <h4><b>Produtos</b></h4>
 
                         <!--<label><b>Descrição</b></label>-->
 

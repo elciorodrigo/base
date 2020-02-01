@@ -8,7 +8,7 @@ urlpatterns = [
     path('product-list', views.product_list, name='product_list'),
 
 
-    # path('employee/get_free/', views.get_free_employee, name='get_free_employee'),
+    path('product/get_free/', views.get_free_product, name='get_free_product'),
 
 
     path('customer/<slug:customer_id>', views.customer, name='get_customer'),
@@ -26,5 +26,10 @@ urlpatterns = [
     path('work/', views.work, name='work'),
     path('work/<slug:work_id>', views.work, name='get_work'),
     path('work-list', views.work_list, name='work_list'),
-    path('work/employees/submit', views.set_work_employees, name='set_work_employess'),
+    path('work/product/submit', views.set_work_products, name='set_work_products'),
+
+    path('pay-order/finish', views.finish_pay_order, name='finish_pay_order'),
+
+    path('finish-work/', views.finish_work, name='finish_work'),
+    path('work-renew/', views.work_renew, name='renew_work'),
 ]

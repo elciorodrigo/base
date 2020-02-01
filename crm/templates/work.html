@@ -3,23 +3,44 @@
 {% load static %}
 
 <div class="container-fluid">
+  <div class="modal fade" id="modal_finish_work" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Finalizar Locação</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Deseja alterar essa locação para finalizada?</p>
+          </div>
+          <div class="modal-footer">
+            <input type="hidden" class="form-control work-id" id="work-id">
+            <button type="button" class="btn btn-primary" onclick="finish_work({{ work.id }})">Sim</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <div class="card o-hidden border-0 shadow-lg my-5">
     <div class="card-body p-0">
       <!-- Nested Row within Card Body -->
       <div class="row">
 
-        <div class="col-lg-12">
-          <div class="p-5">
+        <div class="col-lg-12" >
+          <div class="p-5" >
             <div class="text-center">
-              <h1 class="h4 text-gray-900 mb-4">{% if work %}Locação Nº {{ work.id}}{% else %}Criar Locação {% endif %}</h1>
+              <h1 class="h4 text-gray-900 mb-4">{% if work %}Locação Nº {{ work.id}} - {% if work.finished %}<b>Finalizada</b>{% else %}<b>Aberta</b>{% endif %}{% else %}Criar Locação {% endif %}</h1>
             </div>
 
               <div id="alert_update" class="alert alert-success">
                   <button type="button" class="close" data-dismiss="alert">&times;</button>
                   <strong>Sucesso!</strong> Alterações foram completadas. {{ alert }}
               </div>
-            <form enctype="multipart/form-data" class="user" action="submit" method="POST">{% csrf_token %}
+            <form enctype="multipart/form-data" class="user" action="submit" method="POST" >{% csrf_token %}
+
                 <input type="number" class="form-control" name="work_id" value="{{ work.id }}" hidden>
               <div class="form-group ">
                 <input type="text" class="form-control text-center" id="description" name="description" data-toggle="tooltip" title="Descrição"
@@ -43,16 +64,16 @@
                       placeholder="Previsão de finalização" value="{{ work.get_eng_end_date }}" >
                 </div>
               </div>
-              <div class="form-group row">
-               <!-- <div class="col-sm-3 mb-3 mb-sm-0">
-                    <input type="address" class="form-control text-center money" id="budget" name="budget" data-toggle="tooltip" title="Valor do Orçamento"
-                      placeholder="Valor do Orçamento" value="{{ work.budget | floatformat:2}}">
-                </div> -->
 
-               <!-- <div class="col-sm-3 mb-3 mb-sm-0">
-                    <input type="address" class="form-control text-center money" id="nfe_value" name="nfe_value" data-toggle="tooltip" title="Valor da NFE"
-                      placeholder="Valor da NFE" value="{{ work.nfe_value | floatformat:2}}">
-                </div> -->
+              <div class="form-group row">
+                <div class="col-sm-3 mb-3 mb-sm-0">
+                  <input type="text" maxlength="10" class="form-control  text-center money" id="month_value" name="month_value"  data-toggle="tooltip" title="Valor Mensal"
+                    placeholder="Valor Mensal" value="{{ work.month_value }}">
+                </div>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control text-center" id="pay_date" name="pay_date" data-toggle="tooltip" title="Dia Vencimento"
+                    placeholder="Dia Vencimento" value="{{ work.pay_date }}" max="31">
+                </div>
               </div>
               <hr>
               <div class="form-group row">
@@ -88,7 +109,7 @@
                   <div class="form-group row">
                     {% if work %}
                         <div class="col-sm-3 mb-3 mb-sm-0">
-                              <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#employees_modal">
+                              <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#employees_modal" {% if work.finished %}disabled{% endif %}>
                                 Alocar Produtos
                               </button>
                          </div>
@@ -107,6 +128,13 @@
                                 {% if work %}Alterar {% else %}Cadastrar {% endif %}
                               </button>
                          </div>
+                        {% if not work.finished %}
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                              <button type="button" class="btn btn-primary btn-block btn-finish" data-toggle="modal"  data-target="#modal_finish_work">
+                                Finalizar Locação
+                              </button>
+                         </div>
+                        {% endif %}
                     {% else %}
                           <div class="col-sm-4 mb-4 mb-sm-0">
                           </div>
@@ -126,7 +154,38 @@
               <!--</button>-->
 
             </form>
-            <form enctype="multipart/form-data" class="user" action="/work/employees/submit" method="POST">{% csrf_token %}
+          {% if work %}
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="p-5">
+                    <div class="text-center">
+                      <h1 class="h4 text-gray-900 mb-4">Pagamentos</h1>
+                    </div>
+                  </div>
+                </div>
+               <div class="col-lg-12">
+                   <table class="table table-bordered display responsive nowrap" id="my_table" width="100%" cellspacing="0">
+                      <thead>
+                        <tr >
+                          <th>Vencimento</th>
+                          <th>Valor</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for p in pay_order %}
+                        <tr>
+                          <td>{{ p.due_date|date:'d/m/Y' }}</td>
+                          <td>{{ p.value }}</td>
+                          <td>{% if p.status == 1 %}Pendente{% else %}Pago{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+               </div>
+              </div>
+            {% endif %}
+            <form enctype="multipart/form-data" class="user" action="/work/product/submit" method="POST" >{% csrf_token %}
                 <input type="number" class="form-control" name="work_id_we" value="{{ work.id }}" hidden>
               <div class="modal" id="employees_modal">
                 <div class="modal-dialog">
@@ -143,37 +202,24 @@
                         <!--<label><b>Descrição</b></label>-->
 
                         <div id="div-activitys">
-                            {% if employees_work %}
-                                {% for employee_work in employees_work %}
+                            {% if product_work %}
+                                {% for po in product_work %}
                                     <div class="row" id="12">
                                         <div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">
-                                            <input class="form-control" id="id[]" name="id[]" type="hidden" value="{{ employee_work.employee.id }}" >
+                                            <input class="form-control" id="id[]" name="id[]" type="hidden" value="{{ po.product.id }}" >
                                             <div class="form-group">
                                               <select class="form-control text-center" d="name[]" name="name[]">
-                                                    <option value={{ work_employee.employee.id }}>{{ employee_work.employee.external_id}} - {{ employee_work.employee.user.get_full_name }}</option>
+                                                    <option value={{ po.product.id }}>{{ po.product.num}} - {{ po.product.desc }}</option>
                                               </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-2 mb-2 mb-sm-0">
-                                            <button type="button" id="remove-activity-button" title="Excluir Nota" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
+                                            <button type="button" id="remove-activity-button" title="Excluir Produto" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
                                         </div>
                                     </div>
                                 {% endfor %}
 
-                                    <!--<div class="row" id="12">-->
-                                        <!--<div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">-->
-                                            <!--<div class="form-group">-->
-                                              <!--<select class="form-control text-center" d="name[]" name="name[]" required>-->
-                                                <!--{% for employee in employees %}-->
-                                                    <!--<option value={{ employee.id }}>{{ employee.external_id}} - {{ employee.user.get_full_name }}</option>-->
-                                                <!--{% endfor %}-->
-                                              <!--</select>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                        <!--<div class="col-sm-2 mb-2 mb-sm-0">-->
-                                            <!--<button type="button" id="remove-activity-button" title="Excluir Nota" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
+
                             {% endif %}
                         </div>
                        <div class="form-group row">
@@ -187,7 +233,7 @@
                     <div class="modal-footer">
                       <div class="form-group row">
                         <div class="col-sm-12 mb-12 mb-sm-0">
-                          <button type="submit" id="save-activity-button" class="btn btn-success">Salvar</button>
+                          <button type="submit" id="save-activity-button" class="btn btn-success" >Salvar</button>
                           <button type="button" class="btn btn-danger " data-dismiss="modal">Sair</button>
                          </div>
                       </div>
@@ -217,14 +263,14 @@
                 <input class="form-control" id="1" name="1" type="hidden" value="1" >
                 <div class="form-group">
                     <select class="form-control text-center" d="name[]" name="name[]" required>
-                        {{for employees}}
-                            <option value="{{:id }}">{{:external_id}} - {{:name }}</option>
+                        {{for products}}
+                            <option value="{{:id }}">{{:num}} - {{:desc }}</option>
                         {{/for}}
                     </select>
                 </div>
             </div>
             <div class="col-sm-2 mb-2 mb-sm-0">
-                <button type="button" id="remove-activity-button" title="Excluir Nota" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
+                <button type="button" id="remove-activity-button" title="Excluir Produto" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
             </div>
         </div>
   {% endverbatim %}
@@ -236,7 +282,7 @@
         $('[data-toggle="tooltip"]').tooltip();
         $('#add-activity-button').on('click', function(e){
             $.ajax({
-                url: "/employee/get_free/",
+                url: "/product/get_free/",
                 type: "GET",
                 success: function (json) {
                     var tmpl = $.templates("#activity-template");
@@ -263,7 +309,32 @@
         if (show_alert) {
             $("#alert_update").show();
         };
-    });
+        $('#my_table').DataTable({
+            responsive: {
+                details: true
+            },
+            "order": [],
+            "lengthChange": false,
+            "searching": false,
+            "language": {
+                "lengthMenu": "Mostrando _MENU_ registros por página",
+                "zeroRecords": "Não foram encontrados registros",
+                "info": "Exibindo _START_ até _END_ de um total de _TOTAL_ registros",
+                "infoEmpty": "Não foram encontrados registros",
+                "infoFiltered": "(filtrados de um total de _MAX_ chamados)",
+                "paginate": {
+                    "first":      "Primeiro",
+                    "last":       "Último",
+                    "next":       "Próximo",
+                    "previous":   "Anterior"
+                },
+                "search": "Buscar:"
+            }
+        });
 
+    });
+    function finish_work(work_id){
+           window.location.href = "/finish-work/?id=" + work_id;
+    }
 </script>
 {% endblock %}

@@ -1,10 +1,12 @@
+from crm.choices import PAY_ORDER_STATUS_PENDING
+
 __author__ = 'rafeg'
 
-from .models import Employee, Position, Customer, Tools, Media, Work, Product
+from .models import Employee, Position, Customer, Tools, Media, Work, Product, PayOrder
 from .util import remage
 from django.contrib.auth.models import User
-from datetime import datetime
-from decimal import Decimal
+from datetime import datetime, timedelta
+from dateutil.rrule import rrule, MONTHLY
 
 
 def set_product(product_dict):
@@ -193,8 +195,8 @@ def set_work(work_dict):
     description = work_dict.get('description')
     work_id = work_dict.get('work_id')
     customer_id = work_dict.get('customer')
-    end_date  = datetime.strptime(work_dict.get('end_date'), '%Y-%m-%d') if work_dict.get('end_date') else None
-    start_date  = datetime.strptime(work_dict.get('start_date'), '%Y-%m-%d') if work_dict.get('start_date') else None
+    end_date  = datetime.strptime(work_dict.get('end_date'), '%Y-%m-%d').date() if work_dict.get('end_date') else None
+    start_date  = datetime.strptime(work_dict.get('start_date'), '%Y-%m-%d').date() if work_dict.get('start_date') else None
     budget = float(work_dict.get('budget').replace('.','').replace(',','.')) if work_dict.get('budget') else None
     nfe_value = float(work_dict.get('nfe_value').replace('.','').replace(',','.')) if work_dict.get('nfe_value') else None
     address = work_dict.get('address')
@@ -203,12 +205,13 @@ def set_work(work_dict):
     cep = work_dict.get('cep')
     neighborhood = work_dict.get('neighborhood')
     city = work_dict.get('city')
-    print(work_dict.get('budget'))
-    print(budget)
+    month_value = float(work_dict.get('month_value').replace('.','').replace(',','.')) if work_dict.get('month_value') else None
+    pay_date = work_dict.get('pay_date')
     customer = Customer.objects.get(id=customer_id)
     if work_id:
         work = Work.objects.filter(id=work_id)
         if work:
+            old_pay_date = work.get().pay_date
             work.update(
                 description=description,
                 customer=customer,
@@ -221,8 +224,12 @@ def set_work(work_dict):
                 adjunct=adjunct,
                 cep=cep,
                 neighborhood=neighborhood,
-                city=city
+                city=city,
+                pay_date=pay_date,
+                month_value=month_value
             )
+            if not work.get().finished:
+                set_pay_order(work.get())
             return work.get()
 
     work = Work.objects.create(
@@ -237,10 +244,58 @@ def set_work(work_dict):
         adjunct=adjunct,
         cep=cep,
         neighborhood=neighborhood,
-        city=city
+        city=city,
+        pay_date=pay_date,
+        month_value=month_value
     )
+    if not work.get().finished:
+        set_pay_order(work.get())
     return work
 
+def diff_month(d1, d2):
+    return (d1.year - d2.year) * 12 + d1.month - d2.month + 1
+
+def set_pay_order(work):
+    #Se a data de inicio for no passado, ignora e seta a data de inicio pra hoje
+    if work.start_date < datetime.now().date():
+        start_date = datetime.now()
+    else:
+        start_date = work.start_date
+
+    month_quantity = diff_month(work.end_date, start_date)
+    month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date))
+
+    #Se o primeiro vencimento for no passado ou hoje, altera para o proximo mes
+    if datetime.now().day >= int(work.pay_date):
+        start_date = month_pay[0].replace(day=1).replace(month=month_pay[0].month + 1)
+        month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date))
+    date_list = []
+
+    for i in month_pay:
+
+        value = work.month_value
+        i = i.replace(day=int(work.pay_date))
+        if i.date() <= work.end_date:
+            if PayOrder.objects.filter(work=work, customer=work.customer,
+                                       due_date__year=i.year, due_date__month=i.month).exists():
+                pay_order = PayOrder.objects.get(work=work, customer=work.customer, due_date__year=i.year,
+                                                     due_date__month=i.month)
+                if pay_order.status == PAY_ORDER_STATUS_PENDING:
+                    if pay_order.due_date >= datetime.now().date():
+                        pay_order.value = value
+                        pay_order.due_date = i
+                        pay_order.save()
+            else:
+                PayOrder.objects.update_or_create(work=work, customer=work.customer, due_date=i,
+                                                  defaults={'value': value})
+
+            date_list.append(i)
+
+    #exclui pagamentos antigos que não serão efetivados
+    PayOrder.objects.filter(work=work, status=PAY_ORDER_STATUS_PENDING,
+                            due_date__gt=datetime.now()).exclude(due_date__in=date_list).delete()
+
+    return work
 
 def set_media(file, file_name):
     image = remage(file, 600)

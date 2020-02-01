@@ -1,6 +1,11 @@
+from datetime import datetime
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from .controller import set_employee, set_customer, set_tools, set_media, set_work, set_product
+from django.views.decorators.csrf import csrf_exempt
+import json
+from .controller import set_employee, set_customer, set_tools, set_media, set_work, set_product, set_pay_order
+from crm.choices import PAY_ORDER_STATUS_FINISHED
+from crm.models import PayOrder, ProductWork
 from .models import Employee, Position, Customer, Tools, Media, NoteCustomer, Work, EmployeeWork, Product
 from django.contrib.auth.decorators import login_required
 
@@ -151,10 +156,10 @@ def set_notes(request):
     return HttpResponseRedirect(redirect_url)
 
 @login_required(login_url='../login')
-def get_free_employee(request):
-    employees = Employee.objects.filter().extra(where=['employee.id not in (select emp.employee_id from employee_work emp where end_date is null)']).order_by('user__first_name')
-    employees_list = [{'id':employee.id, 'external_id':employee.external_id, 'name': employee.user.get_full_name()}  for employee in employees]
-    response = {'employees': employees_list}
+def get_free_product(request):
+    products = Product.objects.filter().extra(where=['id not in (select prod.product_id from product_work prod where end_date is null)']).order_by('desc')
+    product_list = [{'id':product.id, 'num':product.num, 'desc': product.desc}  for product in products]
+    response = {'products': product_list}
     print(response)
     return JsonResponse(response)
 
@@ -171,43 +176,68 @@ def work(request, work_id=False):
         if work_id:
             try:
                 work = Work.objects.get(id=work_id)
-                employees_work = EmployeeWork.objects.filter(work=work, end_date__isnull=True)
-                response['employees_work'] = employees_work
+                product_work = ProductWork.objects.filter(work=work, end_date__isnull=True)
+                response['product_work'] = product_work
                 response['work'] = work
+                pay_order = PayOrder.objects.filter(work=work).order_by('due_date')
+                response['pay_order'] = pay_order
             except ObjectDoesNotExist:
                 return render(request, 'app/404.html', {})
         customers = Customer.objects.all()
-        employees = Employee.objects.filter().extra(where=['employee.id not in (select emp.employee_id from employee_work emp where end_date is null)']).order_by('user__first_name')
         response['customers'] = customers
-        response['employees'] = employees
         return render(request, 'work.html', response)
 
 @login_required(login_url='../login')
-def set_work_employees(request):
+def set_work_products(request):
     from datetime import datetime
-    print('aew')
-    list_work_employees = request.POST.getlist('id[]')
-    list_all_employees = request.POST.getlist('name[]')
+    list_work_products = request.POST.getlist('id[]')
+    list_all_products = request.POST.getlist('name[]')
     work_id = request.POST.get('work_id_we')
-    print('aew2')
-    print(list_all_employees)
-    print(list_work_employees)
-    for i in range(len(list_all_employees)):
-        #if i < len(list_work_employees):
-        #    NoteCustomer.objects.filter(id=list_id[i]).update(description=list_name[i])
-        #    print(list_id[i], list_name[i])
-        if i >= len(list_work_employees):
-            employees_work = EmployeeWork.objects.create(employee_id=list_all_employees[i], work_id=work_id)
-            list_work_employees.append(list_all_employees[i])
-    list_excluded = []
-    for l in list_work_employees:
-        try:
-            list_excluded.append(int(l))
-        except:
-            pass
-    EmployeeWork.objects.filter(work_id=work_id).exclude(employee_id__in=list_excluded).update(end_date=datetime.now())
+    work = Work.objects.get(id=work_id)
+
+    product_list = []
+    for i in list_all_products:
+        ProductWork.objects.update_or_create(product_id=i, work_id=work_id,
+                                             defaults={'start_date': work.start_date})
+    ProductWork.objects.filter(work_id=work_id).exclude(product_id__in=list_all_products).update(end_date=datetime.now())
     redirect_url = '/work/{}?a=1'.format(work_id)
     return HttpResponseRedirect(redirect_url)
+
+
+@login_required(login_url='../login')
+def finish_pay_order(request):
+    if request.method == "GET" and 'id' in request.GET:
+        pay_order_id = request.GET['id']
+        pay_order = PayOrder.objects.get(id=pay_order_id)
+        pay_order.status = PAY_ORDER_STATUS_FINISHED
+        pay_order.save()
+    redirect_url = '/'
+    return HttpResponseRedirect(redirect_url)
+
+
+@login_required(login_url='../login')
+def finish_work(request):
+    if request.method == "GET" and 'id' in request.GET:
+        work_id = request.GET['id']
+        work_obj = Work.objects.get(id=work_id)
+        work_obj.finished = True
+        work_obj.save()
+        ProductWork.objects.filter(work=work_obj, end_date__isnull=True).update(end_date=datetime.now())
+    redirect_url = '/'
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@login_required(login_url='../login')
+@csrf_exempt
+def work_renew(request):
+    if request.method == "POST":
+        work_id = request.POST.get('work_id')
+        end_date = datetime.strptime(request.POST.get('end_date'), '%Y-%m-%d').date()
+        work_obj = Work.objects.get(id=work_id)
+        work_obj.end_date = end_date
+        work_obj.save()
+        set_pay_order(work_obj)
+    return HttpResponse(json.dumps({'status':'success'}), content_type='application/json')
 
 
 @login_required(login_url='../login')

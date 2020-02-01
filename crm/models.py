@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+from crm.choices import PAY_ORDER_STATUS_CHOICES, PAY_ORDER_STATUS_PENDING
 
 
 class Position(models.Model):
@@ -22,6 +23,9 @@ class Product(models.Model):
     alt = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     larg = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     obs = models.CharField(max_length=250, blank=True, null=True)
+
+    def __str__(self):
+        return '{} - {}'.format(self.num, self.desc)
 
 class Employee(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -165,6 +169,8 @@ class Work(models.Model):
     budget = models.FloatField(blank=True, null=True)
     nfe_value = models.FloatField(blank=True, null=True)
     finished = models.BooleanField(default=False)
+    month_value = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=10)
+    pay_date = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return '{} - {}'.format(self.id, self.description)
@@ -204,3 +210,33 @@ class EmployeeWork(models.Model):
 
     class Meta:
         db_table = 'employee_work'
+
+
+class ProductWork(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    work = models.ForeignKey(Work, on_delete=models.DO_NOTHING)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return '{} - {}'.format(self.product.desc, self.work.description)
+
+    class Meta:
+        db_table = 'product_work'
+
+
+class PayOrder(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    work = models.ForeignKey(Work, on_delete=models.CASCADE)
+    value = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2)
+    due_date = models.DateField(blank=True, null=True)
+    status = models.IntegerField(choices=PAY_ORDER_STATUS_CHOICES, default=PAY_ORDER_STATUS_PENDING)
+
+    def __str__(self):
+        return '{} - {}'.format(self.customer.corporate_name, self.work.description)
+
+    class Meta:
+        db_table = 'pay_order'
+
+
+

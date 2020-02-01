@@ -1,8 +1,12 @@
+from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import render
 # Create your views here.
+from crm.choices import PAY_ORDER_STATUS_PENDING
+from crm.models import Work, PayOrder
+
 
 def loginUser(request):
     if request.POST:
@@ -23,7 +27,10 @@ def logoutUser(request):
 
 @login_required(login_url='../login')
 def index(request):
-    return render(request, 'app/index.html', {})  
+    work = Work.objects.filter(end_date__lt=datetime.now() + timedelta(days=10), finished=False).order_by('end_date')
+    pay_order = PayOrder.objects.filter(due_date__lt=datetime.now() + timedelta(days=10),
+                                        status=PAY_ORDER_STATUS_PENDING).order_by('due_date')
+    return render(request, 'app/index.html', {'work':work, 'pay_order': pay_order})
 
 @login_required(login_url='../login')
 def customer(request):

@@ -1,0 +1,8 @@
+__author__ = 'Diogo'
+
+
+PAY_ORDER_STATUS_PENDING = 1
+PAY_ORDER_STATUS_FINISHED = 2
+
+PAY_ORDER_STATUS_CHOICES = ((PAY_ORDER_STATUS_PENDING, 'Pendente'),
+                            (PAY_ORDER_STATUS_FINISHED, 'Pago'),)

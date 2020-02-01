@@ -1,4 +1,4 @@
-from crm.choices import PAY_ORDER_STATUS_PENDING
+Ôªøfrom crm.choices import PAY_ORDER_STATUS_PENDING
 
 __author__ = 'rafeg'
 
@@ -18,7 +18,7 @@ def set_product(product_dict):
     alt = transformeDecimal(product_dict.get('alt',''))
     larg = transformeDecimal(product_dict.get('larg',''))
     obs = product_dict.get('obs')
-   
+
     if product_id:
         product = Product.objects.filter(id=product_id)
         if product:
@@ -291,7 +291,7 @@ def set_pay_order(work):
 
             date_list.append(i)
 
-    #exclui pagamentos antigos que n„o ser„o efetivados
+    #exclui pagamentos antigos que n√£o ser√£o efetivados
     PayOrder.objects.filter(work=work, status=PAY_ORDER_STATUS_PENDING,
                             due_date__gt=datetime.now()).exclude(due_date__in=date_list).delete()
 

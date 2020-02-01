@@ -57,22 +57,22 @@
                 </div>
                 <div class="col-sm-4 mb-4 mb-sm-0">
                     <input type="date" class="form-control  text-center" id="start_date" name="start_date" data-toggle="tooltip" title="Previsão de início"
-                      placeholder="Previsão de início" value="{{ work.get_eng_start_date }}" >
+                      placeholder="Previsão de início" value="{{ work.get_eng_start_date }}" required>
                 </div>
                 <div class="col-sm-4 mb-4 mb-sm-0">
                     <input type="date" class="form-control  text-center" id="end_date" name="end_date" data-toggle="tooltip" title="Previsão de finalização"
-                      placeholder="Previsão de finalização" value="{{ work.get_eng_end_date }}" >
+                      placeholder="Previsão de finalização" value="{{ work.get_eng_end_date }}" required>
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-sm-3 mb-3 mb-sm-0">
                   <input type="text" maxlength="10" class="form-control  text-center money" id="month_value" name="month_value"  data-toggle="tooltip" title="Valor Mensal"
-                    placeholder="Valor Mensal" value="{{ work.month_value }}">
+                    placeholder="Valor Mensal" value="{{ work.month_value }}" required>
                 </div>
                 <div class="col-sm-3">
                   <input type="number" class="form-control text-center" id="pay_date" name="pay_date" data-toggle="tooltip" title="Dia Vencimento"
-                    placeholder="Dia Vencimento" value="{{ work.pay_date }}" max="31">
+                    placeholder="Dia Vencimento" value="{{ work.pay_date }}" max="31" required>
                 </div>
               </div>
               <hr>

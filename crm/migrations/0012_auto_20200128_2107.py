@@ -9,10 +9,4 @@ class Migration(migrations.Migration):
         ('crm', '0011_auto_20200128_2051'),
     ]
 
-    operations = [
-        migrations.AlterField(
-            model_name='payorder',
-            name='due_date',
-            field=models.DateField(blank=True, null=True),
-        ),
-    ]
+   

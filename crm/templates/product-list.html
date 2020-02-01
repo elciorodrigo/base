@@ -30,7 +30,7 @@
               <td>{{ p.desc }}</td>
               <!--<td class="cpf">{{ emp.cpf }}</td>-->
               <!--<td class="rg">{{ emp.rg }}</td>-->
-              <td></td>
+              <td>{% if p.is_allocated %}Sim{% else %}Não{% endif %}</td>
             </tr>
             {% endfor %}
           </tbody>

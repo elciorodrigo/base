@@ -24,6 +24,9 @@ class Product(models.Model):
     larg = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     obs = models.CharField(max_length=250, blank=True, null=True)
 
+    def is_allocated(self):
+        return True if ProductWork.objects.filter(product=self, end_date__isnull=True).exists() else False
+
     def __str__(self):
         return '{} - {}'.format(self.num, self.desc)
 

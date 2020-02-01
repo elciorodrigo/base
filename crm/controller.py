@@ -248,8 +248,8 @@ def set_work(work_dict):
         pay_date=pay_date,
         month_value=month_value
     )
-    if not work.get().finished:
-        set_pay_order(work.get())
+    if not work.finished:
+        set_pay_order(work)
     return work
 
 def diff_month(d1, d2):

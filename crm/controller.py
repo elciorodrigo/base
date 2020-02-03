@@ -7,7 +7,7 @@ from .util import remage
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 from dateutil.rrule import rrule, MONTHLY
-
+import calendar
 
 def set_product(product_dict):
     product_id = product_dict.get('product_id')
@@ -272,9 +272,12 @@ def set_pay_order(work):
     date_list = []
 
     for i in month_pay:
-
+        max_day = calendar.monthrange(i.year,i.month)[1]
         value = work.month_value
-        i = i.replace(day=int(work.pay_date))
+        if max_day < work.pay_date:
+            i = i.replace(day=max_day)
+        else:
+            i = i.replace(day=int(work.pay_date))
         if i.date() <= work.end_date:
             if PayOrder.objects.filter(work=work, customer=work.customer,
                                        due_date__year=i.year, due_date__month=i.month).exists():

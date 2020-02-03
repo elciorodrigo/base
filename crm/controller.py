@@ -266,7 +266,7 @@ def set_pay_order(work):
     month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date))
 
     #Se o primeiro vencimento for no passado ou hoje, altera para o proximo mes
-    if datetime.now().day >= int(work.pay_date):
+    if datetime.now().day >= int(work.pay_date) or start_date.day >= int(work.pay_date):
         start_date = month_pay[0].replace(day=1).replace(month=month_pay[0].month + 1)
         month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date))
     date_list = []
@@ -274,7 +274,7 @@ def set_pay_order(work):
     for i in month_pay:
         max_day = calendar.monthrange(i.year,i.month)[1]
         value = work.month_value
-        if max_day < work.pay_date:
+        if int(max_day) < int(work.pay_date):
             i = i.replace(day=max_day)
         else:
             i = i.replace(day=int(work.pay_date))

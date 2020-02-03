@@ -51,7 +51,7 @@
                       <select class="form-control text-center" id="customer" name="customer"  data-toggle="tooltip" title="Cliente" required>
                         <!--<option></option>-->
                         {% for customer in customers %}
-                            <option value={{ customer.id }} {% if customer == wor.customer %} selected {% endif %}>{{ customer.corporate_name }}</option>
+                            <option value={{ customer.id }} {% if customer == work.customer %} selected {% endif %}>{{ customer.corporate_name }}</option>
                         {% endfor %}
                       </select>
                 </div>

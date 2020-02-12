@@ -15,9 +15,4 @@ class Migration(migrations.Migration):
             name='first_due_date',
             field=models.DateField(blank=True, null=True),
         ),
-        migrations.AlterField(
-            model_name='payorder',
-            name='due_date',
-            field=models.DateField(blank=True, null=True),
-        ),
     ]

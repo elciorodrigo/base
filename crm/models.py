@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
-from crm.choices import PAY_ORDER_STATUS_CHOICES, PAY_ORDER_STATUS_PENDING
+from django.db.models.aggregates import Sum
+from crm.choices import PAY_ORDER_STATUS_CHOICES, PAY_ORDER_STATUS_PENDING, PERSON_TYPE_CHOICES
 
 
 class Position(models.Model):
@@ -102,6 +103,7 @@ class Customer(models.Model):
     cep = models.CharField(max_length=10, blank=True, null=True)
     city = models.CharField(max_length=50, blank=True, null=True)
     neighborhood = models.CharField(max_length=100, blank=True, null=True)
+    person_type = models.IntegerField(blank=True, null=True, choices=PERSON_TYPE_CHOICES)
 
     def __str__(self):
         return self.corporate_name
@@ -174,6 +176,8 @@ class Work(models.Model):
     finished = models.BooleanField(default=False)
     month_value = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=10)
     pay_date = models.IntegerField(blank=True, null=True)
+    first_due_date = models.DateField(blank=True, null=True)
+    discount = models.DecimalField(blank=True, null=True, decimal_places=2, max_digits=10)
 
     def __str__(self):
         return '{} - {}'.format(self.id, self.description)
@@ -198,6 +202,20 @@ class Work(models.Model):
             return datetime.strftime(self.end_date, '%d/%m/%Y')
         return ''
 
+    def get_eng_first_due_date(self):
+        if self.first_due_date:
+            return datetime.strftime(self.first_due_date, '%Y-%m-%d')
+        return ''
+
+    def get_products_value_month(self):
+        if self.finished:
+            return self.month_value + self.discount
+        else:
+            if ProductWork.objects.filter(work=self, end_date__isnull=True).aggregate(Sum('value'))['value__sum']:
+                return round(ProductWork.objects.filter(work=self, end_date__isnull=True).aggregate(Sum('value'))['value__sum'], 2)
+            else:
+                return 0
+
     class Meta:
         db_table = 'work'
 
@@ -220,6 +238,7 @@ class ProductWork(models.Model):
     work = models.ForeignKey(Work, on_delete=models.DO_NOTHING)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
+    value = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2)
 
     def __str__(self):
         return '{} - {}'.format(self.product.desc, self.work.description)

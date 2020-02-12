@@ -16,18 +16,47 @@
             </div>
             <form enctype="multipart/form-data" class="user" action="submit" method="POST">{% csrf_token %}
                 <input type="number" class="form-control" name="customer_id" value="{{ customer.id }}" hidden>
-              <div class="form-group ">
-                <input type="text" class="form-control text-center" id="corporate_name" name="corporate_name" data-toggle="tooltip" title="Razão Social"
+              <div class="form-group row">
+                <div class="col-sm-8 mb-8 mb-sm-12">
+                    <input type="text" class="form-control text-center" id="corporate_name" name="corporate_name" data-toggle="tooltip" title="Razão Social"
                   placeholder="Razão social" value="{{ customer.corporate_name }}">
+                </div>
+                <div class="col-sm-4 mb-4 mb-sm-12">
+
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="radio-person" id="radio-individual-person" value="1" {% if customer.person_type == 1 or not customer %}checked{% endif %}>
+                      <label class="form-check-label" for="radio-individual-person">
+                        Pessoa Física
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="radio-person" id="radio-legal-person" value="2" {% if customer.person_type == 2 %}checked{% endif %}>
+                      <label class="form-check-label" for="radio-legal-person">
+                        Pessoa Jurídica
+                      </label>
+                    </div>
+                </div>
+
               </div>
               <div class="form-group row">
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control text-center cpf" id="state_registration" name="state_registration" data-toggle="tooltip" title="I.E"
-                    placeholder="CPF" value="{{ customer.state_registration }}">
+                {% if customer.person_type == 1 or not customer %}
+                  <input type="text" class="form-control text-center " id="state_registration" name="state_registration" data-toggle="tooltip" title="R.G."
+                    placeholder="R.G." value="{{ customer.state_registration }}">
+                {% else %}
+                    <input type="text" class="form-control text-center " id="state_registration" name="state_registration" data-toggle="tooltip" title="I.E."
+                    placeholder="I.E." value="{{ customer.state_registration }}">
+                {% endif %}
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" class="form-control text-center cnpj" id="cnpj" name="cnpj" data-toggle="tooltip" title="CNPJ"
+                {% if customer.person_type == 1 or not customer %}
+                  <input type="text" class="form-control text-center cpf" id="cnpj" name="cnpj" data-toggle="tooltip" title="CPF"
+                    placeholder="CPF" value="{{ customer.cnpj }}">
+                {% else %}
+                    <input type="text" class="form-control text-center cnpj" id="cnpj" name="cnpj" data-toggle="tooltip" title="CNPJ"
                     placeholder="CNPJ" value="{{ customer.cnpj }}">
+                {% endif %}
+
                 </div>
                 <div class="col-sm-3 mb-3 mb-sm-0">
                   <input type="text" class="form-control text-center phone_with_ddd" id="phone" name="phone" data-toggle="tooltip" title="Telefone Principal"
@@ -187,6 +216,29 @@
             $(this).parent().parent().remove();
         });
     });
-
+    $('input[type=radio][name=radio-person]').on('change', function() {
+      switch ($(this).val()) {
+        case '1':
+          //Pessoa Fisica
+          $("#cnpj").removeClass('cnpj');
+          $("#cnpj").addClass('cpf');
+          $("#cnpj").attr('placeholder','CPF');
+          $("#cnpj").attr('data-original-title','CPF');
+          $("#state_registration").attr('placeholder','R.G.');
+          $("#state_registration").attr('data-original-title','R.G.');
+          $("#cnpj").mask('000.000.000-00');
+          break;
+        case '2':
+          //Pessoa Juridica
+          $("#cnpj").removeClass('cpf');
+          $("#cnpj").addClass('cnpj');
+          $("#cnpj").attr('placeholder','CNPJ');
+          $("#cnpj").attr('data-original-title','CNPJ');
+          $("#state_registration").attr('placeholder','I.E.');
+          $("#state_registration").attr('data-original-title','I.E.');
+          $("#cnpj").mask('00.000.000/0000-00');
+          break;
+      }
+    });
 </script>
 {% endblock %}

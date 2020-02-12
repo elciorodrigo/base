@@ -122,6 +122,7 @@ def set_customer(customer_dict):
     cep = customer_dict.get('cep')
     neighborhood = customer_dict.get('neighborhood')
     city = customer_dict.get('city')
+    person_type = customer_dict.get('radio-person')
 
     if customer_id:
         customer = Customer.objects.filter(id=customer_id)
@@ -138,6 +139,7 @@ def set_customer(customer_dict):
                 cep=cep,
                 neighborhood=neighborhood,
                 city=city,
+                person_type=person_type,
             )
             customer = customer.get()
             return customer
@@ -155,6 +157,7 @@ def set_customer(customer_dict):
         cep=cep,
         neighborhood=neighborhood,
         city=city,
+        person_type=person_type,
     )
     return customer
 
@@ -206,10 +209,19 @@ def set_work(work_dict):
     neighborhood = work_dict.get('neighborhood')
     city = work_dict.get('city')
     month_value = float(work_dict.get('month_value').replace('.','').replace(',','.')) if work_dict.get('month_value') else None
-    pay_date = work_dict.get('pay_date')
+    first_due_date = datetime.strptime(work_dict.get('first_due_date'), '%Y-%m-%d').date() if work_dict.get('first_due_date') else None
     customer = Customer.objects.get(id=customer_id)
+    discount = float(work_dict.get('discount').replace('.','').replace(',','.')) if work_dict.get('discount') else 0
+
     if work_id:
         work = Work.objects.filter(id=work_id)
+        if work.get().get_products_value_month() and discount <= float(work.get().get_products_value_month()):
+            month_value = float(work.get().get_products_value_month()) - discount
+        elif discount >= float(work.get().get_products_value_month()):
+            discount = 0
+            month_value = work.get().get_products_value_month()
+        else:
+            month_value = 0
         if work:
             old_pay_date = work.get().pay_date
             work.update(
@@ -225,8 +237,10 @@ def set_work(work_dict):
                 cep=cep,
                 neighborhood=neighborhood,
                 city=city,
-                pay_date=pay_date,
-                month_value=month_value
+                pay_date=first_due_date.day,
+                first_due_date=first_due_date,
+                month_value=month_value,
+                discount=discount
             )
             if not work.get().finished:
                 set_pay_order(work.get())
@@ -245,8 +259,10 @@ def set_work(work_dict):
         cep=cep,
         neighborhood=neighborhood,
         city=city,
-        pay_date=pay_date,
-        month_value=month_value
+        pay_date=first_due_date.day,
+        first_due_date=first_due_date,
+        month_value=month_value,
+        discount=discount
     )
     if not work.finished:
         set_pay_order(work)
@@ -265,35 +281,35 @@ def set_pay_order(work):
     month_quantity = diff_month(work.end_date, start_date)
     month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date))
     if len(month_pay) > 0:
-
-        #Se o primeiro vencimento for no passado ou hoje, altera para o proximo mes
-        if datetime.now().day >= int(work.pay_date) or start_date.day >= int(work.pay_date):
-            start_date = month_pay[0].replace(day=1).replace(month=month_pay[0].month + 1)
-            month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date))
         date_list = []
+        if work.month_value:
+            #Se o primeiro vencimento for no passado ou hoje, altera para o proximo mes
+            if datetime.now().day >= int(work.pay_date) or start_date.day >= int(work.pay_date):
+                start_date = month_pay[0].replace(day=1).replace(month=month_pay[0].month + 1)
+                month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date))
 
-        for i in month_pay:
-            max_day = calendar.monthrange(i.year,i.month)[1]
-            value = work.month_value
-            if int(max_day) < int(work.pay_date):
-                i = i.replace(day=max_day)
-            else:
-                i = i.replace(day=int(work.pay_date))
-            if i.date() <= work.end_date:
-                if PayOrder.objects.filter(work=work, due_date__year=i.year, due_date__month=i.month).exists():
-                    pay_order = PayOrder.objects.get(work=work, due_date__year=i.year,
-                                                         due_date__month=i.month)
-                    if pay_order.status == PAY_ORDER_STATUS_PENDING:
-                        if pay_order.due_date >= datetime.now().date():
-                            pay_order.value = value
-                            pay_order.due_date = i
-                            pay_order.customer = work.customer
-                            pay_order.save()
+            for i in month_pay:
+                max_day = calendar.monthrange(i.year,i.month)[1]
+                value = work.month_value
+                if int(max_day) < int(work.pay_date):
+                    i = i.replace(day=max_day)
                 else:
-                    PayOrder.objects.update_or_create(work=work, due_date=i,
-                                                      defaults={'value': value, 'customer': work.customer})
+                    i = i.replace(day=int(work.pay_date))
+                if i.date() <= work.end_date:
+                    if PayOrder.objects.filter(work=work, due_date__year=i.year, due_date__month=i.month).exists():
+                        pay_order = PayOrder.objects.get(work=work, due_date__year=i.year,
+                                                             due_date__month=i.month)
+                        if pay_order.status == PAY_ORDER_STATUS_PENDING:
+                            if pay_order.due_date >= datetime.now().date():
+                                pay_order.value = value
+                                pay_order.due_date = i
+                                pay_order.customer = work.customer
+                                pay_order.save()
+                    else:
+                        PayOrder.objects.update_or_create(work=work, due_date=i,
+                                                          defaults={'value': value, 'customer': work.customer})
 
-                date_list.append(i)
+                    date_list.append(i)
 
         #exclui pagamentos antigos que não serão efetivados
         PayOrder.objects.filter(work=work, status=PAY_ORDER_STATUS_PENDING,

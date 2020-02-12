@@ -6,3 +6,12 @@ PAY_ORDER_STATUS_FINISHED = 2
 
 PAY_ORDER_STATUS_CHOICES = ((PAY_ORDER_STATUS_PENDING, 'Pendente'),
                             (PAY_ORDER_STATUS_FINISHED, 'Pago'),)
+
+
+
+
+PERSON_TYPE_INDIVIDUAL = 1
+PERSON_TYPE_LEGAL = 2
+
+PERSON_TYPE_CHOICES = ((PERSON_TYPE_INDIVIDUAL, 'Pessoa Fisica'),
+                       (PERSON_TYPE_LEGAL, 'Pessoa Juridica'))

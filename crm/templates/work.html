@@ -23,7 +23,26 @@
         </div>
       </div>
     </div>
-
+    <div class="modal fade" id="modal_pay" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Efetuar Pagamento</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Deseja alterar essa fatura para paga?</p>
+          </div>
+          <div class="modal-footer">
+            <input type="hidden" class="form-control pay-order-id" id="pay-order-id">
+            <button type="button" class="btn btn-primary" onclick="finish_pay_order()">Sim</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+          </div>
+        </div>
+      </div>
+    </div>
   <div class="card o-hidden border-0 shadow-lg my-5">
     <div class="card-body p-0">
       <!-- Nested Row within Card Body -->
@@ -67,12 +86,20 @@
 
               <div class="form-group row">
                 <div class="col-sm-3 mb-3 mb-sm-0">
-                  <input type="text" maxlength="10" class="form-control  text-center money" id="month_value" name="month_value"  data-toggle="tooltip" title="Valor Mensal"
-                    placeholder="Valor Mensal" value="{{ work.month_value }}" required>
+                  <input type="text" maxlength="10" class="form-control  text-center money disable" id="sum_value" name="sum_value"  data-toggle="tooltip" title="Valor Total"
+                    placeholder="Valor Total" value="{{ work.get_products_value_month }}" readonly>
+                </div>
+                <div class="col-sm-3 mb-3 mb-sm-0">
+                  <input type="text" maxlength="10" class="form-control  text-center money" id="discount" name="discount" max="{{ work.get_products_value_month }}" data-toggle="tooltip" title="Valor Desconto"
+                    placeholder="Valor Desconto" value="{{ work.discount }}">
+                </div>
+                <div class="col-sm-3 mb-3 mb-sm-0">
+                  <input type="text" maxlength="10" class="form-control  text-center money" id="month_value" name="month_value"  data-toggle="tooltip" title="Valor com Desconto"
+                    placeholder="Valor com Desconto" value="{{ work.month_value }}" readonly>
                 </div>
                 <div class="col-sm-3">
-                  <input type="number" class="form-control text-center" id="pay_date" name="pay_date" data-toggle="tooltip" title="Dia Vencimento"
-                    placeholder="Dia Vencimento" value="{{ work.pay_date }}" min="1" max="31" required>
+                  <input type="date" class="form-control text-center" id="first_due_date" name="first_due_date" data-toggle="tooltip" title="Primeiro Vencimento"
+                    placeholder="Primeiro Vencimento" value="{{ work.get_eng_first_due_date }}" min="{{ work.get_eng_start_date }}" required>
                 </div>
               </div>
               <hr>
@@ -170,6 +197,7 @@
                           <th>Vencimento</th>
                           <th>Valor</th>
                           <th>Status</th>
+                          <th>Ação</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -178,6 +206,11 @@
                           <td>{{ p.due_date|date:'d/m/Y' }}</td>
                           <td>{{ p.value }}</td>
                           <td>{% if p.status == 1 %}Pendente{% else %}Pago{% endif %}</td>
+                          {% if p.status == 1 %}
+                            <td><button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal_pay" data-pay-order-id="{{ p.id }}">Pagar</button></td>
+                          {% else %}
+                              <td></td>
+                          {% endif %}
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -187,8 +220,8 @@
             {% endif %}
             <form enctype="multipart/form-data" class="user" action="/work/product/submit" method="POST" >{% csrf_token %}
                 <input type="number" class="form-control" name="work_id_we" value="{{ work.id }}" hidden>
-              <div class="modal" id="employees_modal">
-                <div class="modal-dialog">
+              <div class="modal fade bd-example-modal-lg" id="employees_modal">
+                <div class="modal-dialog modal-lg">
                   <div class="modal-content">
 
                     <div class="modal-header">
@@ -205,18 +238,24 @@
                             {% if product_work %}
                                 {% for po in product_work %}
                                     <div class="row" id="12">
-                                        <div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">
+                                        <div id="div-sm1" class="col-sm-6 mb-6 mb-sm-0">
                                             <input class="form-control" id="id[]" name="id[]" type="hidden" value="{{ po.product.id }}" >
                                             <div class="form-group">
-                                              <select class="form-control text-center" d="name[]" name="name[]">
+                                              <select class="form-control text-center" id="name[]" name="name[]">
                                                     <option value={{ po.product.id }}>{{ po.product.num}} - {{ po.product.desc }}</option>
                                               </select>
                                             </div>
                                         </div>
+                                        <div id="div-sm1" class="col-sm-4 mb-4 mb-sm-0">
+                                            <input type="text" maxlength="10" class="form-control  text-center money field-rent-value" id="price" name="price[]"  data-toggle="tooltip" title="Valor Aluguel"
+                                             placeholder="Valor Aluguel" value="{{ po.value }}">
+                                        </div>
+
                                         <div class="col-sm-2 mb-2 mb-sm-0">
                                             <button type="button" id="remove-activity-button" title="Excluir Produto" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
                                         </div>
                                     </div>
+
                                 {% endfor %}
 
 
@@ -259,7 +298,7 @@
 <script id="activity-template" type="text/x-jsrender">
   {% verbatim %}
         <div class="row" id="">
-            <div id="div-sm1" class="col-sm-10 mb-10 mb-sm-0">
+            <div id="div-sm1" class="col-sm-6 mb-6 mb-sm-0">
                 <input class="form-control" id="1" name="1" type="hidden" value="1" >
                 <div class="form-group">
                     <select class="form-control text-center" d="name[]" name="name[]" required>
@@ -269,6 +308,11 @@
                     </select>
                 </div>
             </div>
+            <div id="div-sm1" class="col-sm-4 mb-4 mb-sm-0">
+                <input type="text" maxlength="10" class="form-control  text-center money field-rent-value" id="price" name="price[]"  data-toggle="tooltip" title="Valor Aluguel"
+                 placeholder="Valor Aluguel" value="">
+            </div>
+
             <div class="col-sm-2 mb-2 mb-sm-0">
                 <button type="button" id="remove-activity-button" title="Excluir Produto" class="btn btn-danger glyphicon glyphicon-minus delete-activity-button"><b>-</b></button>
             </div>
@@ -290,6 +334,7 @@
                     //components = {"employess": employees};
                     var html = tmpl.render(json);
                     $("#div-activitys").append($(html));
+                    $('.money').mask('000.000.000.000.000,00', {reverse: true});
                 }
         });
             var tmpl = $.templates("#activity-template");
@@ -336,5 +381,21 @@
     function finish_work(work_id){
            window.location.href = "/finish-work/?id=" + work_id;
     }
+    $('#modal_pay').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var pay_order_id = button.data('pay-order-id') // Extract info from data-* attributes
+
+      var modal = $(this)
+      modal.find('.pay-order-id').val(pay_order_id)
+    });
+    function finish_pay_order(){
+       var modal = $("#modal_pay")
+       var pay_order_id = modal.find('.pay-order-id').val();
+       window.location.href = "/pay-order/finish?id=" + pay_order_id;
+    }
+    $('#start_date').on('change', function(e){
+        $('#first_due_date').val($(this).val());
+        $("#first_due_date").attr("min", $(this).val())
+    });
 </script>
 {% endblock %}

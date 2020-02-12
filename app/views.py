@@ -27,8 +27,8 @@ def logoutUser(request):
 
 @login_required(login_url='../login')
 def index(request):
-    work = Work.objects.filter(end_date__lt=datetime.now() + timedelta(days=10), finished=False).order_by('end_date')
-    pay_order = PayOrder.objects.filter(due_date__lt=datetime.now() + timedelta(days=10),
+    work = Work.objects.filter(end_date__lt=datetime.now(), finished=False).order_by('end_date')
+    pay_order = PayOrder.objects.filter(due_date__lt=datetime.now(),
                                         status=PAY_ORDER_STATUS_PENDING).order_by('due_date')
     return render(request, 'app/index.html', {'work':work, 'pay_order': pay_order})
 

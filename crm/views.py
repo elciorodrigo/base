@@ -190,16 +190,23 @@ def work(request, work_id=False):
 @login_required(login_url='../login')
 def set_work_products(request):
     from datetime import datetime
-    list_work_products = request.POST.getlist('id[]')
     list_all_products = request.POST.getlist('name[]')
+    list_all_prices = request.POST.getlist('price[]')
     work_id = request.POST.get('work_id_we')
     work = Work.objects.get(id=work_id)
-
-    product_list = []
+    cont = 0
     for i in list_all_products:
+        value = float(list_all_prices[cont].replace('.','').replace(',','.')) if list_all_prices[cont] else None
+
         ProductWork.objects.update_or_create(product_id=i, work_id=work_id,
-                                             defaults={'start_date': work.start_date})
+                                             defaults={'start_date': work.start_date, 'value': value, 'end_date': None})
+        cont += 1
     ProductWork.objects.filter(work_id=work_id).exclude(product_id__in=list_all_products).update(end_date=datetime.now())
+    discount = work.discount if work.discount else 0
+    work.month_value = work.get_products_value_month() - discount
+    work.save()
+    if not work.finished:
+        set_pay_order(work)
     redirect_url = '/work/{}?a=1'.format(work_id)
     return HttpResponseRedirect(redirect_url)
 
@@ -211,8 +218,7 @@ def finish_pay_order(request):
         pay_order = PayOrder.objects.get(id=pay_order_id)
         pay_order.status = PAY_ORDER_STATUS_FINISHED
         pay_order.save()
-    redirect_url = '/'
-    return HttpResponseRedirect(redirect_url)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 @login_required(login_url='../login')
@@ -223,7 +229,6 @@ def finish_work(request):
         work_obj.finished = True
         work_obj.save()
         ProductWork.objects.filter(work=work_obj, end_date__isnull=True).update(end_date=datetime.now())
-    redirect_url = '/'
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 

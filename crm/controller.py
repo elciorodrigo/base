@@ -262,7 +262,7 @@ def set_work(work_dict):
         pay_date=first_due_date.day,
         first_due_date=first_due_date,
         month_value=month_value,
-        discount=discount
+        discount=0
     )
     if not work.finished:
         set_pay_order(work)

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+
+<head>
+    <title>HOT - Consulta Chamado BETA</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+
+<body>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2 col-lg-2 col-md-2 col-xs-2">
+            <img src="{{ site_url }}{% static 'app/img/logo-spagnol.png' %}">
+        </div>
+        <div class="col-sm-8 col-lg-8 col-md-8 col-xs-8" style="text-align: center">
+            <h2>Spagnol Locação de Container</h2>
+            <h3>Rua XV de Novembro, 341 - Centro - Rincão</h3>
+            <h3>CNPJ:33.019.306/0001-49</h3>
+            <h3>I.E.:585.016.550.114</h3></h3>
+        </div>
+        <div class="col-sm-2 col-lg-2 col-md-2 col-xs-2" style="text-align: right">
+            <br>
+            <img src="{% static 'app/img/logo-spagnol.PNG' %}">
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-sm-12 col-lg-12 col-md-12 col-xs-12">
+           <table class="table table-bordered">
+               <thead>
+                   <tr>
+                       <th colspan="2">Dados Solicitação</th>
+                   </tr>
+               </thead>
+               <tbody>
+                    <tr>
+                        <td><b>Projeto:</b> {{ asr.project_name }}</td>
+                        <td><b>Telefone:</b> {{ asr.telephone }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Nome do solicitante:</b> {{ asr.requester }}</td>
+                        <td><b>Email solicitante:</b> {{ asr.email }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Data Solicitação:</b> {{ asr.request_date|date:'d/m/Y' }}</td>
+                        <td><b>Centro de Custo:</b> {{ asr.cost_center }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Data análise DCN:</b> {{ asr.analysis_date|date:'d/m/Y' }}</td>
+                        <td><b>Responsável C/C:</b> {{ asr.cc_owner }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>PPM:</b> {{ asr.ppm }}</td>
+                        <td><b>RDM:</b> {{ asr.rdm }}</td>
+                    </tr>
+               </tbody>
+           </table>
+       </div>
+    </div>
+    <br>
+
+    </div>
+
+</div>
+</BR></BR></BR></BR>
+
+</body>
+</html>

@@ -33,7 +33,6 @@ urlpatterns = [
     path('finish-work/', views.finish_work, name='finish_work'),
     path('work-renew/', views.work_renew, name='renew_work'),
 
-    path('test-pdf/', views.generate_order_pdf, name='generate_order_pdf'),
-    path('contract/', views.contract, name='contract'),
+    path('contract/<int:work_id>', views.contract, name='contract'),
 
 ]

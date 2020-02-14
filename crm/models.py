@@ -216,6 +216,15 @@ class Work(models.Model):
             else:
                 return 0
 
+    def get_products(self):
+        return ProductWork.objects.filter(work=self, end_date__isnull=True)
+
+    def get_products_value(self):
+        if ProductWork.objects.filter(work=self, end_date__isnull=True).aggregate(Sum('product__price'))['product__price__sum']:
+            return round(ProductWork.objects.filter(work=self, end_date__isnull=True).aggregate(Sum('product__price'))['product__price__sum'], 2)
+        else:
+            return 0
+
     class Meta:
         db_table = 'work'
 

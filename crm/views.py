@@ -7,7 +7,7 @@ from admin.settings import SITE_URL
 from .controller import set_employee, set_customer, set_tools, set_media, set_work, set_product, set_pay_order
 from crm.choices import PAY_ORDER_STATUS_FINISHED
 from crm.models import PayOrder, ProductWork
-#from crm.util import render_to_pdf
+from crm.util import render_to_pdf
 from .models import Employee, Position, Customer, Tools, Media, NoteCustomer, Work, EmployeeWork, Product
 from django.contrib.auth.decorators import login_required
 
@@ -253,12 +253,10 @@ def work_list(request):
     return render(request, 'work-list.html', {'works':work})
 
 
-def generate_order_pdf(request):
-    product = Product.objects.all()
-    #pdf = render_to_pdf('contract.html', {})
-    return HttpResponse(pdf, content_type='application/pdf')
-
-
 @login_required(login_url='../login')
-def contract(request):
-    return render(request, 'contract.html', {'site_url': SITE_URL})
+def contract(request, work_id):
+    work = Work.objects.get(id=work_id)
+    pdf = render_to_pdf('contract.html', {'work': work})
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline;filename=contrato_{}.pdf'.format(work.id)
+    return response

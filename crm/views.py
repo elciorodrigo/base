@@ -1,3 +1,4 @@
+import calendar
 from datetime import datetime
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
@@ -259,4 +260,16 @@ def contract(request, work_id):
     pdf = render_to_pdf('contract.html', {'work': work})
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = 'inline;filename=contrato_{}.pdf'.format(work.id)
+    return response
+
+
+@login_required(login_url='../login')
+def receipt(request, pay_order_id):
+    pay = PayOrder.objects.get(id=pay_order_id)
+    max_day = calendar.monthrange(pay.due_date.year,pay.due_date.month)[1]
+    end_date = pay.due_date.replace(day=max_day)
+    start_date = pay.due_date.replace(day=1)
+    pdf = render_to_pdf('receipt.html', {'pay': pay, 'start_date': start_date, 'end_date': end_date})
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline;filename=recibo_{}.pdf'.format(pay.id)
     return response

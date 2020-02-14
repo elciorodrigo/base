@@ -212,9 +212,17 @@
                           <td>{{ p.value }}</td>
                           <td>{% if p.status == 1 %}Pendente{% else %}Pago{% endif %}</td>
                           {% if p.status == 1 %}
-                            <td><button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal_pay" data-pay-order-id="{{ p.id }}">Pagar</button></td>
+                            <td style="width: 20%;">
+                                <div class="row"><div class="col-sm-6 mb-6 mb-sm-12">
+                                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal_pay" data-pay-order-id="{{ p.id }}">Pagar</button>
+                                </div>
+                                    <div class="col-sm-6 mb-6 mb-sm-12">
+                                        <a href="/receipt/{{ p.id }}" class="btn btn-primary btn-block" target="_blank">Recibo</a>
+                                    </div>
+                                </div>
+                            </td>
                           {% else %}
-                              <td></td>
+                              <td><a href="/receipt/{{ p.id }}" class="btn btn-primary btn-block" target="_blank">Recibo</a></td>
                           {% endif %}
                         </tr>
                         {% endfor %}

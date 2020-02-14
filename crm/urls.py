@@ -34,5 +34,6 @@ urlpatterns = [
     path('work-renew/', views.work_renew, name='renew_work'),
 
     path('contract/<int:work_id>', views.contract, name='contract'),
+    path('receipt/<int:pay_order_id>', views.receipt, name='contract'),
 
 ]

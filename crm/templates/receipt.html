@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row">
             <p align="center" style="font-size: 16px"><b>Recibo de Pagamento</b></p>
-            <p width="100%" style="font-size: 14px"><br>Recebi de <b>{{ pay.customer.corporate_name }}</b> inscrito no CPF/CNPJ sob o n°: {{ pay.customer.cnpj }} R.G/I.E n°: {{ pay.customer.ie }} a soma de R$ {{ pay.value }} como forma de pagamento de aluguel da equipamentos, para o período de {{ start_date|date:'d/m/Y' }} à {{ end_date|date:'d/m/Y' }} .<br><br>
+            <p width="100%" style="font-size: 14px"><br>Recebi de <b>{{ pay.customer.corporate_name }}</b> inscrito no CPF/CNPJ sob o n°: {{ pay.customer.cnpj }} R.G/I.E n°: {{ pay.customer.state_registration }} a soma de R$ {{ pay.value }} como forma de pagamento de aluguel da equipamentos, para o período de {{ start_date|date:'d/m/Y' }} à {{ end_date|date:'d/m/Y' }} .<br><br>
 Recebido por: _______________________________________ CPF n°: _____________________ em sua capacidade como ____________________________________. <br><br>
 Forma de pagamento:<br>
 ( ) Dinheiro<br>

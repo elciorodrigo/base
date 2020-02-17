@@ -24,22 +24,10 @@
                     </tr>
                 </table>
                 <td width="20%">
-                    <table border="1">
+                    <table border="1" style="height: 70px">
                         <tr>
                             <td><br>&nbsp;&nbsp;Emissão</td>
                             <td><br>&nbsp;&nbsp;{{ work.crated_date|date:'d/m/Y' }}</td>
-                        </tr>
-                        <tr>
-                            <td><br>&nbsp;&nbsp;Vencimentos</td>
-                            <td><br></td>
-                        </tr>
-                        <tr>
-                            <td><br></td>
-                            <td><br></td>
-                        </tr>
-                        <tr>
-                            <td><br></td>
-                            <td><br></td>
                         </tr>
                         <tr>
                             <td><br>&nbsp;&nbsp;Devolução</td>
@@ -96,6 +84,7 @@
             </tr>
             </tbody>
         </table>
+
         <table class="table" border="1" style="font-size: 14px">
             <tbody>
             <tr style="height: 25px;margin-left: 0.2em">
@@ -122,6 +111,26 @@
             </tr>
             </tbody>
         </table>
+        <br>
+        <table class="table" border="1" style="font-size: 14px;">
+            <tbody>
+            <tr style="height: 25px;margin-left: 0.2em">
+                <td colspan="2" align="center"><b>MENSALIDADES</b></td>
+            </tr>
+            <tr style="height: 25px;margin-left: 0.2em">
+                <td><b>Vencimento</b></td>
+                <td><b>Valor</b></td>
+            </tr>
+            {% for p in work.get_pay_orders %}
+            <tr style="height: 25px;margin-left: 0.2em">
+                <td>{{ p.due_date|date:'d/m/Y' }}</td>
+                <td>{{ p.value }}</td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
         <p align="right">Operação não sujeita a Nota Fiscal de serviço nos termos da lei complementar 116/2003 de 01/08/2003</p>
         <table border="1" style="font-size: 14px;">
             <TR style="height: 25px;margin-left: 0.2em">

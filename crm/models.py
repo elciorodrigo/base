@@ -225,6 +225,9 @@ class Work(models.Model):
         else:
             return 0
 
+    def get_pay_orders(self):
+        return PayOrder.objects.filter(work=self)
+
     class Meta:
         db_table = 'work'
 

@@ -272,23 +272,21 @@ def diff_month(d1, d2):
     return (d1.year - d2.year) * 12 + d1.month - d2.month + 1
 
 def set_pay_order(work):
-    #Se a data de inicio for no passado, ignora e seta a data de inicio pra hoje
-    if work.start_date < datetime.now().date():
-        start_date = datetime.now()
-    else:
-        start_date = work.start_date
+    start_date = work.first_due_date
 
     month_quantity = diff_month(work.end_date, start_date)
-    month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date))
+    month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date.replace(day=1)))
+    print(month_pay)
     if len(month_pay) > 0:
         date_list = []
         if work.month_value:
             #Se o primeiro vencimento for no passado ou hoje, altera para o proximo mes
-            if datetime.now().day >= int(work.pay_date) or start_date.day >= int(work.pay_date):
+            if start_date < work.start_date:
                 start_date = month_pay[0].replace(day=1).replace(month=month_pay[0].month + 1)
                 month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date))
 
             for i in month_pay:
+                print (i.date())
                 max_day = calendar.monthrange(i.year,i.month)[1]
                 value = work.month_value
                 if int(max_day) < int(work.pay_date):
@@ -300,11 +298,10 @@ def set_pay_order(work):
                         pay_order = PayOrder.objects.get(work=work, due_date__year=i.year,
                                                              due_date__month=i.month)
                         if pay_order.status == PAY_ORDER_STATUS_PENDING:
-                            if pay_order.due_date >= datetime.now().date():
-                                pay_order.value = value
-                                pay_order.due_date = i
-                                pay_order.customer = work.customer
-                                pay_order.save()
+                            pay_order.value = value
+                            pay_order.due_date = i
+                            pay_order.customer = work.customer
+                            pay_order.save()
                     else:
                         PayOrder.objects.update_or_create(work=work, due_date=i,
                                                           defaults={'value': value, 'customer': work.customer})
@@ -312,8 +309,7 @@ def set_pay_order(work):
                     date_list.append(i)
 
         #exclui pagamentos antigos que não serão efetivados
-        PayOrder.objects.filter(work=work, status=PAY_ORDER_STATUS_PENDING,
-                                due_date__gt=datetime.now()).exclude(due_date__in=date_list).delete()
+        PayOrder.objects.filter(work=work, status=PAY_ORDER_STATUS_PENDING).exclude(due_date__in=date_list).delete()
 
     return work
 

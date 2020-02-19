@@ -19,8 +19,7 @@
           <thead>
             <tr >
               <th>CLIENTE</th>
-              <th>lOCAÇÃO</th>
-              <th>Descrição</th>
+              <th>LOCAÇÃO</th>
               <th>SITUAÇÃO</th>
               <th>PREVISÃO INÍCIO</th>
               <th>PREVISÃO FIM</th>
@@ -31,7 +30,6 @@
             <tr>
               <td><a href='../work/{{ work.id }}'>{{ work.customer.corporate_name }}</a></td>
               <td><a href='../work/{{ work.id }}'>{{ work.id }}</a></td>
-              <td>{{ work.description }}</td>
               <td>{% if work.finished %} Finalizada {% else %} Aberta {% endif %}</td>
               <td>{{ work.get_format_start_date }}</td>
               <td>{{ work.get_format_end_date }}</td>

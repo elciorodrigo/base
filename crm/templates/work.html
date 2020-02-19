@@ -61,13 +61,9 @@
             <form enctype="multipart/form-data" class="user" action="submit" method="POST" >{% csrf_token %}
 
                 <input type="number" class="form-control" name="work_id" value="{{ work.id }}" hidden>
-              <div class="form-group ">
-                <input type="text" class="form-control text-center" id="description" name="description" data-toggle="tooltip" title="Descrição"
-                  placeholder="Descrição" value="{{ work.description }}" required>
-              </div>
               <div class="form-group row">
                 <div class="col-sm-4 mb-4 mb-sm-0">
-                      <select class="form-control text-center" id="customer" name="customer"  data-toggle="tooltip" title="Cliente" required>
+                      <select class="form-control text-center selectpicker" data-live-search="true" id="customer" name="customer"  data-toggle="tooltip" title="Cliente" required>
                         <!--<option></option>-->
                         {% for customer in customers %}
                             <option value={{ customer.id }} {% if customer == work.customer %} selected {% endif %}>{{ customer.corporate_name }}</option>
@@ -150,11 +146,7 @@
                                 Adicionar Atividade
                               </button>
                          </div> -->
-                        <div class="col-sm-3 mb-3 mb-sm-0">
-                              <button type="submit" class="btn btn-primary btn-block">
-                                {% if work %}Alterar {% else %}Cadastrar {% endif %}
-                              </button>
-                         </div>
+
                         {% if not work.finished %}
                         <div class="col-sm-3 mb-3 mb-sm-0">
                               <button type="button" class="btn btn-primary btn-block btn-finish" data-toggle="modal"  data-target="#modal_finish_work">
@@ -167,6 +159,11 @@
                             Gerar Contrato
                           </a>
                         </div>
+                        <div class="col-sm-3 mb-3 mb-sm-0">
+                              <button type="submit" class="btn btn-primary btn-block">
+                                {% if work %}Salvar {% else %}Cadastrar {% endif %}
+                              </button>
+                         </div>
                     {% else %}
                           <div class="col-sm-4 mb-4 mb-sm-0">
                           </div>
@@ -411,4 +408,10 @@
         $("#first_due_date").attr("min", $(this).val())
     });
 </script>
+<link rel="stylesheet" href="{% static 'app/vendor/bootstrap/css/bootstrap-select.min.css' %}">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="{% static 'app/vendor/bootstrap/js/bootstrap-select.min.js' %}"></script>
+
+
 {% endblock %}

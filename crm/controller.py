@@ -276,7 +276,6 @@ def set_pay_order(work):
 
     month_quantity = diff_month(work.end_date, start_date)
     month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date.replace(day=1)))
-    print(month_pay)
     if len(month_pay) > 0:
         date_list = []
         if work.month_value:
@@ -286,7 +285,6 @@ def set_pay_order(work):
                 month_pay = list(rrule(freq=MONTHLY, count=month_quantity, dtstart=start_date))
 
             for i in month_pay:
-                print (i.date())
                 max_day = calendar.monthrange(i.year,i.month)[1]
                 value = work.month_value
                 if int(max_day) < int(work.pay_date):

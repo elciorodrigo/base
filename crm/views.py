@@ -206,7 +206,11 @@ def set_work_products(request):
         cont += 1
     ProductWork.objects.filter(work_id=work_id).exclude(product_id__in=list_all_products).update(end_date=datetime.now())
     discount = work.discount if work.discount else 0
-    work.month_value = work.get_products_value_month() - discount
+    if work.get_products_value_month():
+        work.month_value = work.get_products_value_month() - discount
+    else:
+        work.month_value = 0
+        work.discount = 0
     work.save()
     if not work.finished:
         set_pay_order(work)

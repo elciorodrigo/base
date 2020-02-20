@@ -67,6 +67,9 @@ def employee_list(request):
     employee = Employee.objects.filter(user__is_active=True)
     return render(request, 'employee-list.html', {'employee':employee})
 
+@login_required(login_url='../login')
+def finance(request):
+    return render(request, 'finance.html', {})
 
 @login_required(login_url='../login')
 def customer(request, customer_id=False):

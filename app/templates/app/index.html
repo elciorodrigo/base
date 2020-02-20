@@ -97,7 +97,6 @@
                       <thead>
                         <tr >
                           <th>Nº</th>
-                          <th>Descrição</th>
                           <th>Data Fim</th>
                           <th>Renovar</th>
                           <th>Finalizar</th>
@@ -107,7 +106,6 @@
                         {% for w in work %}
                         <tr>
                           <td><a href='../work/{{w.id}}'>{{ w.id }}</a></td>
-                          <td>{{ w.description }}</td>
                           <td>{{ w.end_date|date:'d/m/Y' }}</td>
                           <td><button type="button" class="btn btn-primary btn-block " data-toggle="modal" title="Renovar" data-target="#modal_renew" data-work-id="{{ w.id }}" data-finish-date="{{ w.end_date|date:'Y-m-d' }}"><i class="fa fa-redo-alt"></i></button></td><td>
                           <button type="button" class="btn btn-primary btn-block" data-toggle="modal" title="Finalizar" data-target="#modal_finish_work" data-work-id="{{ w.id }}"><i class="fa fa-check"></i></button></td>

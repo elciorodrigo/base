@@ -291,7 +291,7 @@ def set_pay_order(work):
                     i = i.replace(day=max_day)
                 else:
                     i = i.replace(day=int(work.pay_date))
-                if i.date() <= work.end_date:
+                if i.date() < work.end_date:
                     if PayOrder.objects.filter(work=work, due_date__year=i.year, due_date__month=i.month).exists():
                         pay_order = PayOrder.objects.get(work=work, due_date__year=i.year,
                                                              due_date__month=i.month)

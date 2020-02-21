@@ -30,6 +30,8 @@ urlpatterns = [
 
     path('pay-order/finish', views.finish_pay_order, name='finish_pay_order'),
 
+    path('finance', views.finance, name='finance'),
+
     path('finish-work/', views.finish_work, name='finish_work'),
     path('work-renew/', views.work_renew, name='renew_work'),
 

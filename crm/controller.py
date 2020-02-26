@@ -208,7 +208,7 @@ def set_work(work_dict):
     cep = work_dict.get('cep')
     neighborhood = work_dict.get('neighborhood')
     city = work_dict.get('city')
-    month_value = float(work_dict.get('month_value').replace('.','').replace(',','.')) if work_dict.get('month_value') else None
+    month_value = float(work_dict.get('month_value').replace('.','').replace(',','.')) if work_dict.get('month_value') else 0
     first_due_date = datetime.strptime(work_dict.get('first_due_date'), '%Y-%m-%d').date() if work_dict.get('first_due_date') else None
     customer = Customer.objects.get(id=customer_id)
     discount = float(work_dict.get('discount').replace('.','').replace(',','.')) if work_dict.get('discount') else 0
